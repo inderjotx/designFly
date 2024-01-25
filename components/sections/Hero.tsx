@@ -27,7 +27,12 @@ function Hero() {
             </div>
 
             <div>
-                <Button className='rounded-full px-20 py-6 text-lg'>Get Started</Button>
+                <Button className='rounded-full px-20 py-6 text-lg'>
+                    <Link href={"/register"} >
+                        Get Started
+                    </Link>
+
+                </Button>
             </div>
 
             <div>

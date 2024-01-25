@@ -20,6 +20,7 @@ import { useToast } from "./ui/use-toast"
 import Link from "next/link"
 import LoginImage from "@/public/assets/login.jpg"
 import Image from "next/image"
+import { redirect } from "next/navigation"
 
 const formSchema = z.object({
     username: z.string().min(2, "Name Should atleast have 5 characters").max(50),
@@ -101,6 +102,8 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
             redirect: true,
             callbackUrl: "http://localhost:3000"
         })
+
+        redirect("/dashboard")
 
         // if (providers && providers.google) {
         //     await signIn(providers?.google?.id)

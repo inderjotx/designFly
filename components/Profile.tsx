@@ -9,11 +9,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import Userimage from "./ui/Userimage"
+import { useSession } from "next-auth/react"
+
 export function Profile() {
+
+    const session = useSession()
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline">Profile</Button>
+                <button>
+                    <Userimage name={session.data?.user.name ?? "U"} url={session.data?.user.image ?? ""} />
+                </button>
+
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-36">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -25,7 +34,6 @@ export function Profile() {
 
                     <DropdownMenuItem>
                         Log out
-
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

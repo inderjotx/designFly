@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import * as z from "zod"
 import { toast } from '../ui/use-toast';
@@ -13,10 +13,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import ColorCanvas from "@/public/assets/ImageLogo.png"
-import { MyCarousel } from '../ui/MyCarousel';
-import { SelectedImages } from '../SelectedImages';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -27,15 +26,8 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 const FormSchema = z.object({
     title: z.string().min(2, "Title should have atleast 2 characters").max(20),
     description: z.string().min(5, "Description should have atleast 2 characters"),
-    image: z
-        .any()
-    // .refine((files) => files?.length == 1, "Image is required.")
-    // .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-    // .refine(
-    //     (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-    //     ".jpg, .jpeg, .png and .webp files are accepted."
-    // ),
 })
+
 
 
 
@@ -47,7 +39,12 @@ export function CreateDesign() {
 
     const session = useSession()
 
-    const [selectedImageUrl, setSelectedImageUrl] = useState<any>()
+    const imageRef = useRef<HTMLInputElement | null>(null)
+
+    const [hasImage, setHasImage] = useState<boolean>(false)
+
+    const router = useRouter()
+
 
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
@@ -61,25 +58,97 @@ export function CreateDesign() {
 
     async function onSubmit(values: FormType) {
 
-        console.log("iamge")
-        console.log(selectedImageUrl)
+        console.log("image data")
+        const selectedImage = imageRef.current?.files?.[0]
+
+
+        console.log(selectedImage?.name)
+
+
+        console.log("all data")
+        console.log(values)
+
+        if (!selectedImage) {
+            alert("select image first ")
+        }
+
+
         try {
 
-            const response = await axios.post('/api/add-design', {
-                title: values.title,
-                description: values.description,
-                image: selectedImageUrl,
-                userId: session.data?.user.id
+            // generating presigned url for the image 
+            const { data } = await axios.post('/api/get-image-url', {
+                userId: session.data?.user.id,
+                imageName: selectedImage?.name
             })
 
-            console.log("response from user creation ")
+
+
+            console.log("response from create image ")
+            console.log(data.url)
+            console.log(data.imageKey)
+
+
+            const imageKey = data.imageKey
+            const presignedUrl = data.url
+
+
+
+            // store the image 
+            const headers = { 'Content-Type': selectedImage?.type }
+
+
+            const response = await axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
+
+
+            console.log("response after sending the image to s3")
             console.log(response)
 
+            if (response.status == 200) {
+
+                const response = await axios.post('/api/add-design', {
+                    title: values.title,
+                    description: values.description,
+                    imageKey: imageKey,
+                    userId: session.data?.user.id
+                })
+
+                console.log("response from user creation ")
+                console.log(response)
+
+                // give a toast and then move 
+                router.push('/dashboard')
+            }
+
+            else {
+                console.log("error occured ")
+            }
+
+
+
+
         }
+
+
+
+
         catch (err) {
             console.log(err)
         }
     }
+
+
+
+    function imageInputOnChange() {
+
+        if (imageRef.current?.files?.[0]) {
+            setHasImage(true)
+        }
+        else {
+            setHasImage(false)
+        }
+    }
+
+
 
 
     return (
@@ -90,40 +159,27 @@ export function CreateDesign() {
                         <Button type="button" className='rounded-full px-6' variant="outline" asChild><Link href={"/"}>Cancel</Link></Button>
                         <Button type="submit" className='rounded-full px-6'>Create</Button>
                     </div>
+                    <div className='relative h-80 border-2 bg-background flex justify-center items-center border-black/60 dark:border-white/60  border-dashed rounded-md'>
+                        <Input
+                            type='file'
+                            accept=".jpg, .jpeg, .webp, .png"
+                            className='absolute w-full h-full opacity-0'
+                            placeholder="Upload Image"
+                            id="image"
+                            ref={imageRef}
+                            name="image"
+                            onChange={imageInputOnChange}
+                        />
 
-                    <FormField
-                        control={form.control}
-                        name="image"
-                        render={({ field }) => (
-                            <FormItem>
-                                <div className='w-full flex flex-col space-y-4 justify-center items-center relative h-96  border-2 border-black/60  dark:border-white/60  border-dashed rounded-md  '>
-                                    <FormControl>
-                                        <Input type='file' className='absolute w-full h-full opacity-0' placeholder="Upload Image"
-                                            // {...field}
-                                            id="fileInput"
-                                            onBlur={field.onBlur}
-                                            name={field.name}
-                                            onChange={(e) => {
-                                                field.onChange(e.target.files?.[0]);
-                                                setSelectedImageUrl(e.target.files?.[0]);
-                                            }}
-                                            ref={field.ref}
-                                            va={MAX_FILE_SIZE}
-                                        />
-
-                                    </FormControl>
-                                    {
-                                        selectedImageUrl ?
-                                            <Image src={URL.createObjectURL(selectedImageUrl)} alt='canvas images' width={100} height={100} className='object-contain object-center w-full h-full ' quality={100} />
-                                            // <MyCarousel files={Array.from(selectedImageUrl)} />
-                                            :
-                                            <Image src={ColorCanvas} className='w-40 h-40 object-contain' alt='colorcanvas' />
-                                    }
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                        {
+                            hasImage ?
+                                //@ts-ignore
+                                <Image priority={false} placeholder='empty' src={URL.createObjectURL(imageRef.current.files?.[0])} alt='canvas images' width={100} height={100} className='object-cover w-full h-full ' quality={100} />
+                                // <MyCarousel files={Array.from(selectedImage)} />
+                                :
+                                <Image src={ColorCanvas} priority={false} placeholder='empty' className='w-40 h-40 object-contain' alt='colorcanvas' />
+                        }
+                    </div>
 
 
                     <FormField
@@ -159,4 +215,5 @@ export function CreateDesign() {
             </Form>
         </div>
     )
+
 }

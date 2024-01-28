@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { StoreInS3 } from "@/lib/storeInS3"
 import { prisma } from "@/lib/prismadb";
 import { User } from "@prisma/client";
 
@@ -8,9 +7,8 @@ interface designProps {
     userId: string,
     title: string,
     description: string,
-    image: File
+    imageKey: string
 }
-
 
 
 
@@ -21,33 +19,19 @@ export async function POST(req: Request) {
 
 
 
+    console.log("desgin data received from the user ")
     console.log(design)
 
-    if (!design || (isValidDesign(design))) {
+    if (!design || !design.description || !design.imageKey || !design.title || !design.userId) {
         return Response.json("Design is required ", { status: 400 })
     }
 
 
     try {
-        const imageName = `${design.userId}${design.image.name}`
-        const response = await StoreInS3(imageName, design.image)
-
-
-        console.log("respones from s3 after sending ")
-        console.log(response)
-
-        if (!response) {
-            return Response.json("error occured ", { status: 400 })
-        }
-
 
         const responseFromPrism = await prisma.design.create({
             data: {
-                userId: design.userId,
-                description: design.description,
-                title: design.title,
-                imageKey: imageName
-
+                ...design
             }
         })
 
@@ -81,13 +65,3 @@ export async function POST(req: Request) {
 
 }
 
-
-
-function isValidDesign(obj: any): boolean {
-    return (
-        typeof obj.userId === 'string' &&
-        typeof obj.title === 'string' &&
-        typeof obj.description === 'string' &&
-        obj.image instanceof File
-    );
-}

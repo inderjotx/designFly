@@ -25,6 +25,6 @@ model Design {
   title       String
   description String
   userId      String
-  user        User   @relation(fields: [imageKey], references: [id])
+  user        User   @relation(fields: [userId], references: [id])
   imageKey    String
 }

@@ -13,6 +13,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import ColorCanvas from "@/public/assets/ImageLogo.png"
+import { MyCarousel } from '../ui/MyCarousel';
+import { SelectedImages } from '../SelectedImages';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -41,7 +45,9 @@ type FormType = z.infer<typeof FormSchema>
 
 export function CreateDesign() {
 
-    const [selectedImages, setSelectedImage] = useState<any[]>([])
+    const session = useSession()
+
+    const [selectedImageUrl, setSelectedImageUrl] = useState<any>()
 
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
@@ -53,9 +59,26 @@ export function CreateDesign() {
 
 
 
-    function onSubmit(values: FormType) {
-        toast({ title: values.title, description: values.description })
-        console.log(values)
+    async function onSubmit(values: FormType) {
+
+        console.log("iamge")
+        console.log(selectedImageUrl)
+        try {
+
+            const response = await axios.post('/api/add-design', {
+                title: values.title,
+                description: values.description,
+                image: selectedImageUrl,
+                userId: session.data?.user.id
+            })
+
+            console.log("response from user creation ")
+            console.log(response)
+
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
 
@@ -73,7 +96,7 @@ export function CreateDesign() {
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <div className='w-full flex flex-col space-y-4 justify-center items-center relative h-60 border-2 border-black/60  dark:border-white/60  border-dashed rounded-md  '>
+                                <div className='w-full flex flex-col space-y-4 justify-center items-center relative h-96  border-2 border-black/60  dark:border-white/60  border-dashed rounded-md  '>
                                     <FormControl>
                                         <Input type='file' className='absolute w-full h-full opacity-0' placeholder="Upload Image"
                                             // {...field}
@@ -81,26 +104,28 @@ export function CreateDesign() {
                                             onBlur={field.onBlur}
                                             name={field.name}
                                             onChange={(e) => {
-                                                field.onChange(e.target.files);
-                                                setSelectedImage(e.target.files?.[0] || null);
+                                                field.onChange(e.target.files?.[0]);
+                                                setSelectedImageUrl(e.target.files?.[0]);
                                             }}
                                             ref={field.ref}
-
+                                            va={MAX_FILE_SIZE}
                                         />
 
                                     </FormControl>
                                     {
-                                        selectedImages?.length > 0 ?
-                                            <Image src={URL.createObjectURL(selectedImages[0])} alt='canvas images' className='object-contain w-1/2 h-1/2 ' quality={100} />
+                                        selectedImageUrl ?
+                                            <Image src={URL.createObjectURL(selectedImageUrl)} alt='canvas images' width={100} height={100} className='object-contain object-center w-full h-full ' quality={100} />
+                                            // <MyCarousel files={Array.from(selectedImageUrl)} />
                                             :
-                                            <Image src={ColorCanvas} alt='canvas images' className='object-contain w-1/2 h-1/2 ' quality={100} />
+                                            <Image src={ColorCanvas} className='w-40 h-40 object-contain' alt='colorcanvas' />
                                     }
-                                    <div className='text-center text-sm'><h2>Upload Your Design</h2></div>
                                 </div>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
+
                     <FormField
                         control={form.control}
                         name="title"

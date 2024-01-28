@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import Userimage from "./ui/Userimage"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 
 export function Profile() {
 
@@ -33,7 +33,7 @@ export function Profile() {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                        Log out
+                        <div onClick={() => signOut()}>Log out</div>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

@@ -7,8 +7,6 @@ interface generateURLProps {
 }
 
 
-const BUCKET_NAME = ""
-
 export async function POST(req: Request) {
     const data: generateURLProps = await req.json()
 

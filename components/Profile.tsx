@@ -11,6 +11,7 @@ import {
 
 import Userimage from "./ui/Userimage"
 import { signOut, useSession } from "next-auth/react"
+import Link from 'next/link'
 
 export function Profile() {
 
@@ -29,7 +30,7 @@ export function Profile() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
-                        Profile
+                        <Link href={"/profile"}  >Profile</Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>

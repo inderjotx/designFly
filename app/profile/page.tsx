@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import axios from "axios"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
 import { useRef, useState } from "react"
 
 export default function Page() {
@@ -55,9 +56,9 @@ export default function Page() {
                 console.log(s3Response)
 
 
-                if (s3Response.status == 200) {
-                    setUserData((prev) => ({ ...prev, image: imageKey }))
-                }
+                setUserData((prev) => ({ ...prev, image: "https://designfly.s3.amazonaws.com/" + imageKey }))
+
+
 
             }
 
@@ -127,9 +128,9 @@ export default function Page() {
 
                 <div className={cn("w-full flex", !canEdit && "hidden")}>
                     <Button variant='destructive' type="button" onClick={() => setCanEdit(false)} className=" rounded-full px-10" >Cancel</Button>
+                    <Button variant="default" type="button" onClick={updateUserData} className="ml-auto rounded-full px-10" >Update</Button>
                 </div>
             </div>
-            <Button variant="default" type="button" onClick={updateUserData} className="ml-auto rounded-full px-10" >Update</Button>
         </div>
     )
 } 

@@ -108,7 +108,7 @@ export function CreateDesign() {
                 const response = await axios.post('/api/add-design', {
                     title: values.title,
                     description: values.description,
-                    imageKey: imageKey,
+                    imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
                     userId: session.data?.user.id
                 })
 

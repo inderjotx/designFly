@@ -20,8 +20,6 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useToast } from "./ui/use-toast"
 import { redirect } from "next/navigation"
-import Image from "next/image"
-import registerImage from "@/public/assets/register.jpg"
 
 const formSchema = z.object({
     username: z.string().min(2, "Name Should atleast have 5 characters").max(50),
@@ -88,7 +86,7 @@ export function RegisterForm() {
         <div className="h-full w-full flex justify-center ">
 
             <Form {...form} >
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" h-full flex flex-col  justify-center items-center space-y-10  lg:w-2/5 w-9/12">
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col mt-24  items-center space-y-10  lg:w-2/5 w-9/12">
                     <div className="mr-auto" >
                         <h1 className="text-4xl font-medium">Register</h1>
                     </div>

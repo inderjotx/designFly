@@ -7,7 +7,7 @@ const SALT_ROUNDS = 4
 
 
 
-export async function getUser(name: string, password: string, email: string) {
+export async function getUser(password: string, email: string) {
     const user = await prisma.user.findFirst({
         where: {
             email
@@ -52,7 +52,7 @@ export async function getUser(name: string, password: string, email: string) {
 
 export async function createUser(name: string, password: string, provider: string, image: string, email: string) {
 
-    const isUser = await getUser(name, password, email)
+    const isUser = await getUser(password, email)
 
     if (isUser) return isUser
 

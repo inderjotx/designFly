@@ -18,6 +18,7 @@ model User {
   provider String
   image    String?
   Design   Design[]
+  bio      String?
 }
 
 model Design {

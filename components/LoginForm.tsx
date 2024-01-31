@@ -23,7 +23,6 @@ import Image from "next/image"
 import { redirect } from "next/navigation"
 
 const formSchema = z.object({
-    username: z.string().min(2, "Name Should atleast have 5 characters").max(50),
     email: z.string().min(1).email("This is not a valid email "),
     password: z.string().min(5, "Password should altest be 5 character long").max(20)
 })
@@ -48,7 +47,6 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
             password: "",
             email: ""
         },
@@ -82,7 +80,6 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
         console.log(values)
 
         const response = await signIn("credentials", {
-            name: values.username,
             password: values.password,
             email: values.email,
             redirect: true,
@@ -119,24 +116,11 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
         <div className="w-full h-full flex justify-center ">
 
             <Form {...form} >
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" h-full flex flex-col  justify-center items-center   space-y-10 lg:w-2/5 w-9/12">
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex  flex-col mt-24 items-center   space-y-10 lg:w-2/5 w-9/12">
                     <div className="mr-auto" >
                         <h1 className="text-4xl font-medium">Login</h1>
                     </div>
                     <div className="space-y-4 w-full  ">
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Username</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Username" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                         <FormField
                             control={form.control}
                             name="email"
@@ -165,7 +149,7 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
                         />
                     </div>
 
-                    <div className="space-x-2">
+                    <div className="space-x-2 ">
                         <Button type="submit" className="">Submit</Button>
                         <Button variant="outline" type="button" className="">
                             <Link href={"/"}>
@@ -175,7 +159,7 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
                         {/* <Button type="button" variant="secondary" onClick={() => handleGoogleLogin()}>Login By Google</Button> */}
                         {/* <Button type="button" onCli >Google</Button> */}
                     </div>
-                    <h3 className="text-sm text-muted-foreground">New on this application <Link href={"/register"} className="font-semibold text-foreground">Register here </Link> </h3>
+                    <h3 className="text-sm text-muted-foreground ">New on this application <Link href={"/register"} className="font-semibold text-foreground">Register here </Link> </h3>
 
                 </form>
 

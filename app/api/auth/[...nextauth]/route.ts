@@ -23,7 +23,6 @@ export const authOptions: AuthOptions = {
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                name: { label: "Name", type: "text" },
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" }
             },
@@ -31,7 +30,7 @@ export const authOptions: AuthOptions = {
                 if (typeof credentials !== "undefined") {
 
                     console.log("Inside the credentails login verification ")
-                    const user = await getUser(credentials.name, credentials.password, credentials.email)
+                    const user = await getUser(credentials.password, credentials.email)
 
                     console.log("user")
                     console.log(user)

@@ -19,13 +19,23 @@ model User {
   image    String?
   Design   Design[]
   bio      String?
+  Heart    Heart[]
 }
 
 model Design {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String
   userId      String
-  user        User   @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id])
   imageKey    String
+  Heart       Heart[]
+}
+
+model Heart {
+  id       String @id @default(uuid())
+  design   Design @relation(fields: [designId], references: [id])
+  designId String
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
 }

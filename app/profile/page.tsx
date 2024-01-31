@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import axios from "axios"
 import { signOut, useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
 import { useRef, useState } from "react"
 
 export default function Page() {
@@ -30,11 +29,9 @@ export default function Page() {
 
     async function updateUserData() {
 
-        // if image change 
-        if (session.data?.user.image != userData.image) {
+        try {
 
-            try {
-
+            if (session.data?.user.image != userData.image) {
 
                 const { data: { url, imageKey } } = await axios.post("/api/get-image-url", {
                     userId: session.data?.user.id,
@@ -55,36 +52,52 @@ export default function Page() {
                 console.log("respnse form s3 ")
                 console.log(s3Response)
 
+                const response = await axios.post("/api/update-profile", {
+                    ...userData,
+                    userId: session.data?.user.id
+                })
+                const newImage = "https://designfly.s3.amazonaws.com/" + imageKey
 
-                setUserData((prev) => ({ ...prev, image: "https://designfly.s3.amazonaws.com/" + imageKey }))
+                console.log("response from update update data")
+                console.log(response)
+
+                // this fucking state is not updateing , so udating using the variable 
+                setUserData((prev) => ({ ...prev, image: newImage }))
+
+                console.log("value from state")
+                console.log(userData.image)
+
+                console.log("value from variable ")
+                console.log(newImage)
+
+                const hasUpdate = await axios.post("/api/update-profile", {
+                    ...userData,
+                    image: newImage,
+                    userId: session.data?.user.id
+                })
+                console.log("response from update update data")
+                console.log(hasUpdate)
+
+                setCanEdit(false)
+                signOut()
 
 
+            }
+            else {
 
+                const response = await axios.post("/api/update-profile", {
+                    ...userData,
+                    userId: session.data?.user.id
+                })
+                console.log("response from update update data")
+                console.log(response)
             }
 
 
 
-            catch (error) {
-                console.log("error inside put image if statemetn ")
-                console.log(error)
-            }
-
-            // update the name of the image to the key 
 
         }
 
-        try {
-
-            const response = await axios.post("/api/update-profile", {
-                ...userData,
-                userId: session.data?.user.id
-            })
-            console.log("response from update update data")
-            console.log(response)
-
-            // sign out the out after updation to update the token
-
-        }
 
         catch (error) {
             console.log(error)

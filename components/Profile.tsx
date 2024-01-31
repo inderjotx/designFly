@@ -32,6 +32,9 @@ export function Profile() {
                     <DropdownMenuItem>
                         <Link href={"/profile"}  >Profile</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link href={"/my-designs/" + session.data?.user.id}  >My Designs </Link>
+                    </DropdownMenuItem>
 
                     <DropdownMenuItem>
                         <div onClick={() => signOut()}>Log out</div>

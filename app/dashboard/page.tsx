@@ -4,7 +4,9 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 import React from 'react'
-import DesignsComponent from '@/components/sections/DesignsComponent'
+// import DesignsComponent from '@/components/sections/DesignsComponent'
+import { Separator } from '@/components/ui/separator'
+import { DesignGrid } from '@/components/DesignGrid'
 
 async function page() {
 
@@ -14,14 +16,15 @@ async function page() {
         redirect('/register')
     }
 
+
+
     return (
-        <div className='w-full h-full flex flex-col items-center '>
+        <div className='flex mx-3 flex-col items-center gap-4'>
 
             <div className='w-11/12 lg:w-10/12 mt-10 h-10 flex justify-between items-center  '>
                 {/* { two new / our designs } */}
                 <div className='space-x-3'>
-                    <Link href={'/'} className='' >New Design</Link>
-                    <Link href={'/'} className='' >My Design</Link>
+                    <Link href={'/'} className='bg-' >New Design</Link>
                 </div>
 
                 {/* { Add Design } */}
@@ -31,8 +34,12 @@ async function page() {
                             Add Design</Link>
                     </Button>
                 </div>
-            </div>
 
+            </div>
+            <Separator className='w-11/12 lg:w-10/12' />
+            <div className='w-11/12 lg:w-10/12 flex justify-center'>
+                <DesignGrid />
+            </div>
         </div>
     )
 }

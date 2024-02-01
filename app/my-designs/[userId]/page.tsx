@@ -1,7 +1,7 @@
-import { DesignCard } from '@/components/DesignCard';
 import { prisma } from '@/lib/prismadb'
 import { redirect } from 'next/navigation'
 import React from 'react'
+import { DesignGridUser } from '@/components/DesignGridUser';
 
 async function getDesigns(userId: string) {
     const designs = prisma.user.findUnique({
@@ -22,25 +22,19 @@ async function getDesigns(userId: string) {
 async function page({ params }: { params: { userId: string } }) {
 
 
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+
     if (!params.userId) {
         redirect('/register')
     }
 
-    const designs = await getDesigns(params.userId)
 
 
 
     return (
-        <div className='h-full w-full mt-10 px-6  grid gap-4 grid-cols-4'>
+        <div className='flex justify-center '>
 
-            {
-                designs?.Design.map((design, index) => (
-                    <div className='md:col-span-2 col-span-1 h-1/2' key={design.id}>
-                        <DesignCard creator={designs} design={design} key={index} />
-                    </div>
-                ))
-            }
-
+            <DesignGridUser userId={params.userId} />
         </div>
     )
 }

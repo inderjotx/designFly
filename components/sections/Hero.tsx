@@ -4,12 +4,17 @@ import { Button } from '../ui/button'
 import HeroImage from "@/public/assets/HeroImage.png"
 import { Github, Instagram, Linkedin } from 'lucide-react'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
 
 const message = "Over 1k people have become part of our community 🎉"
 
 const message2 = "Discover, Share, Collaborate, and Elevate Your Creative Journey"
 
-function Hero() {
+async function Hero() {
+
+    const session = await getServerSession()
+    const user = session?.user
+
     return (
 
         <div className='w-full min-h-full flex items-center mt-8  flex-col space-y-12'>
@@ -28,7 +33,7 @@ function Hero() {
 
             <div>
                 <Button className='rounded-full px-20 py-6 text-lg'>
-                    <Link href={"/register"} >
+                    <Link href={user ? "/dashboard" : "/register"} >
                         Get Started
                     </Link>
 

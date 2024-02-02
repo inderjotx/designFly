@@ -5,22 +5,6 @@ import Link from 'next/link'
 export async function DesignGrid() {
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
-    // let designs
-    // if (userId) {
-    //     designs = await prisma.user.findFirst({
-    //         where: {
-    //             id: userId
-    //         },
-    //         include: {
-    //             Design: {
-    //                 include: {
-    //                     Heart: true
-    //                 }
-    //             }
-    //         }
-    //     })
-    // }
-    // else {
     const designs = await prisma.design.findMany({
         take: 10,
         orderBy: {
@@ -31,7 +15,6 @@ export async function DesignGrid() {
             Heart: true
         }
     })
-    // }
 
 
 
@@ -41,7 +24,7 @@ export async function DesignGrid() {
             {
                 designs.map((design, index) => (
                     <div className='' key={index}>
-                        <Link href={new URL(`designs/${design.id}`, baseUrl)}>
+                        <Link href={`${baseUrl}/designs/${design.id}`}>
                             <DesignCard design={design} creator={design.user} hearts={design.Heart} />
                         </Link>
                     </div>

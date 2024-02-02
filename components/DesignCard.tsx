@@ -2,11 +2,11 @@ import { Design, Heart, User } from '@prisma/client'
 import Userimage from './ui/Userimage'
 import { Heart as HeartIcon } from 'lucide-react'
 import Image from 'next/image'
-
+import Link from 'next/link'
 
 export function DesignCard({ design, creator, hearts }: { design: Design, creator: User, hearts?: Heart[] }) {
 
-
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
 
     return (
         <div className='flex h-72 w-72 flex-col gap-4 rounded-md  '>
@@ -17,10 +17,10 @@ export function DesignCard({ design, creator, hearts }: { design: Design, creato
                 </div>
             </div>
             <div className='flex items-center justify-between px-2'>
-                <div className='flex items-center space-x-3'>
+                <Link className='flex items-center space-x-3' href={`${baseUrl}/profile/${creator.id}`} >
                     <Userimage name={creator.name} className='h-8 w-8' url={creator.image || ""} />
                     <h3 className='text-foreground capitalize text-[14px]'>{creator.name}</h3>
-                </div>
+                </Link>
 
                 <div className='flex  items-center gap-2 justify-between '>
                     <HeartIcon className='h-6 w-6' />

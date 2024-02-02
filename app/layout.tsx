@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 
 import './globals.css'
+import { relative } from 'path'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -32,17 +33,15 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning >
       <head />
-      <body className={inter.className} >
+      <body className={`${inter.className}`}  >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <Provider session={session}>
             <Navbar />
-            <div className='h-full w-full  '>
-              {children}
-            </div>
+            {children}
           </Provider>
           <Toaster />
         </ThemeProvider>
       </body>
-    </html>
+    </html >
   )
 }

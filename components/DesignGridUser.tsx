@@ -31,9 +31,7 @@ export async function DesignGridUser({ userId }: { userId: string }) {
                 {
                     designs.map((design, index) => (
                         <div className='' key={index}>
-                            <Link href={new URL(`designs/${design.id}`, baseUrl)}>
-                                <DesignCard design={design} creator={user} hearts={design.Heart} />
-                            </Link>
+                            <DesignCard design={design} creator={user} hearts={design.Heart} />
                         </div>
                     ))
                 }

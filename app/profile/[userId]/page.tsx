@@ -3,11 +3,18 @@ import { DesignGridUser } from "@/components/DesignGridUser"
 import Userimage from "@/components/ui/Userimage"
 import { Separator } from "@/components/ui/separator"
 import { prisma } from "@/lib/prismadb"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
 
 
 
 export default async function Page({ params }: { params: { userId: string } }) {
+
+    const sessionUser = await getServerSession()
+    console.log("first")
+    console.log(sessionUser?.user.id)
+    console.log("second")
+    console.log(params.userId)
 
     if (!params.userId) {
         return <div>This user does not  exist </div>
@@ -44,7 +51,8 @@ export default async function Page({ params }: { params: { userId: string } }) {
                     <h3 className="">{user.name}</h3>
                     <h3 className="text-muted-foreground text-sm">{user.email}</h3>
                     <h3>{user.bio}</h3>
-                    <Link href="/" className="text-sm mt-4 transition-colors text-muted-foreground hover:text-foreground" >Edit</Link>
+
+                    <Link href={`${params.userId}/settings`} className="text-sm mt-4 transition-colors text-muted-foreground hover:text-foreground" >Edit</Link>
                 </div>
             </div>
             <DesignGridUser userId={user.id} />

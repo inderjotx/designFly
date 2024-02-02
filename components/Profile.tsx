@@ -30,12 +30,14 @@ export function Profile() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
-                        <Link href={"/profile"}  >Profile</Link>
+                        <Link href={"/profile/" + session.data?.user.id}  >Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Link href={"/my-designs/" + session.data?.user.id}  >My Designs </Link>
+                        <Link href={"/profile/" + session.data?.user.id + "/saved"}  >Liked</Link>
                     </DropdownMenuItem>
-
+                    <DropdownMenuItem>
+                        <Link href={"/profile/" + session.data?.user.id}  >Bookmarks</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
                         <div onClick={() => signOut()}>Log out</div>
                     </DropdownMenuItem>

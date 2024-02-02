@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prismadb'
 import React from 'react'
 import { DesignCard } from './DesignCard'
 import Link from 'next/link'
+import { FakeLink } from './ui/FakeLink'
 export async function DesignGrid() {
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
@@ -24,9 +25,7 @@ export async function DesignGrid() {
             {
                 designs.map((design, index) => (
                     <div className='' key={index}>
-                        <Link href={`${baseUrl}/designs/${design.id}`}>
-                            <DesignCard design={design} creator={design.user} hearts={design.Heart} />
-                        </Link>
+                        <DesignCard design={design} creator={design.user} hearts={design.Heart} />
                     </div>
                 ))
             }

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import Userimage from '@/components/ui/Userimage'
 import { BookMarked, Heart } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { HeartIconLink } from '@/components/ui/HeartIconLink'
 
 async function page({ params }: { params: { designId: string } }) {
 
@@ -39,7 +40,7 @@ async function page({ params }: { params: { designId: string } }) {
                         <BookMarked />
                     </div>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
-                        <Heart />
+                        <HeartIconLink designId={params.designId} />
                     </div>
                 </div>
 

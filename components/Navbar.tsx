@@ -42,7 +42,6 @@ function Navbar() {
             <div className='ml-auto flex space-x-4' >
                 {session && session.data && session.data.user ?
                     <div className='flex items-center space-x-4'>
-                        {/* <div className='cursor-pointer font-medium' onClick={() => signOut()} >Sign Out</div> */}
                         <Profile />
                     </div>
                     :

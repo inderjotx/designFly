@@ -38,4 +38,6 @@ model Heart {
   designId String
   userId   String
   user     User   @relation(fields: [userId], references: [id])
+
+  @@unique([designId, userId])
 }

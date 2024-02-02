@@ -2,7 +2,6 @@
 'use client'
 
 import Userimage from "@/components/ui/Userimage"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,6 +13,7 @@ import { useRef, useState } from "react"
 export default function Page() {
 
     const session = useSession()
+
     const [canEdit, setCanEdit] = useState<boolean>(false)
 
     const [userData, setUserData] = useState({ name: session.data?.user.name, email: session.data?.user.email, image: session.data?.user.image })
@@ -119,7 +119,7 @@ export default function Page() {
     return (
         <div className="flex justify-center items-center flex-col">
             <div className="p-8">
-                <Userimage className="h-28 w-28 text-2xl" name={session.data?.user.name || ""} url={!canEdit ? session.data?.user.image || "" : (imageRef.current?.files?.[0]) && URL.createObjectURL(imageRef.current?.files[0])} />
+                <Userimage className="h-28 w-28 text-2xl" name={session.data?.user.name || ""} url={!canEdit ? session.data?.user.image || "" : (imageRef.current?.files?.[0]) ? URL.createObjectURL(imageRef.current?.files[0]) : session.data?.user.image} />
             </div>
             <div>
                 <h2 onClick={() => setCanEdit(true)} className={cn("text-muted-foreground transition-colors hover:text-foreground cursor-pointer", canEdit && "hidden")}>Update Profile</h2>

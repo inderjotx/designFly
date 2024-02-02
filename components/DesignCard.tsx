@@ -3,6 +3,8 @@ import Userimage from './ui/Userimage'
 import { Heart as HeartIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { HeartIconLink } from './ui/HeartIconLink'
+import { FakeLink } from './ui/FakeLink'
 
 export function DesignCard({ design, creator, hearts }: { design: Design, creator: User, hearts?: Heart[] }) {
 
@@ -10,20 +12,21 @@ export function DesignCard({ design, creator, hearts }: { design: Design, creato
 
     return (
         <div className='flex h-72 w-72 flex-col gap-4 rounded-md  '>
-            <div className='h-64 overflow-hidden rounded-md relative'>
-                <Image width={1} height={1} unoptimized src={design.imageKey} className='h-full w-full rounded-md object-cover' alt="design image" />
-                <div className='z-10 top-0 left-0 w-full h-full transition-all group absolute hover:bg-gradient-to-t rounded-md from-black/50  '>
-                    <HeartIcon color='white' className='h-6 w-6 absolute bottom-0 right-0 hidden group-hover:block ' />
+
+            <FakeLink className='cursor-pointer' url={`${baseUrl}/designs/${design.id}`} >
+                <div className='h-64 overflow-hidden rounded-md relative'>
+                    <Image width={1} height={1} unoptimized src={design.imageKey} className='h-full w-full rounded-md object-cover' alt="design image" />
                 </div>
-            </div>
+            </FakeLink>
             <div className='flex items-center justify-between px-2'>
-                <Link className='flex items-center space-x-3' href={`${baseUrl}/profile/${creator.id}`} >
+                {/* <div className='flex items-center space-x-3'> */}
+                <FakeLink className='flex items-center space-x-3 cursor-pointer' url={`${baseUrl}/profile/${creator.id}`} >
                     <Userimage name={creator.name} className='h-8 w-8' url={creator.image || ""} />
                     <h3 className='text-foreground capitalize text-[14px]'>{creator.name}</h3>
-                </Link>
+                </FakeLink>
 
                 <div className='flex  items-center gap-2 justify-between '>
-                    <HeartIcon className='h-6 w-6' />
+                    <HeartIconLink designId={design.id} />
                     <span className='text-[12px]'>{hearts?.length || 3}</span>
                 </div>
             </div>
@@ -31,3 +34,5 @@ export function DesignCard({ design, creator, hearts }: { design: Design, creato
 
     )
 }
+
+

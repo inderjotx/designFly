@@ -1,12 +1,6 @@
 import { prisma } from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
-// motive
-
-
-// design id 
-// userid 
-
 
 
 export async function GET(req: NextRequest) {
@@ -21,7 +15,7 @@ export async function GET(req: NextRequest) {
 
     }
 
-    const isAleady = await prisma.heart.findMany({
+    const isAleady = await prisma.bookMark.findMany({
         where: {
             userId: userId,
             designId: designId,
@@ -30,9 +24,10 @@ export async function GET(req: NextRequest) {
     })
 
 
+
     if (isAleady.length == 0) {
 
-        const data = await prisma.heart.create({
+        const data = await prisma.bookMark.create({
 
             data: {
                 userId: userId,
@@ -52,15 +47,14 @@ export async function GET(req: NextRequest) {
 
     else {
 
-        const remove = await prisma.heart.deleteMany({
+        const remove = await prisma.bookMark.deleteMany({
             where: {
                 userId: userId,
-                designId: designId,
-
+                designId: designId
             }
         })
 
-        return NextResponse.json({ message: "Like Removed " }, { status: 200 })
+        return NextResponse.json({ message: "Remove Like" }, { status: 200 })
     }
 
 } 

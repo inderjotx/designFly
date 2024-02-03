@@ -1,10 +1,9 @@
 import { Design, Heart, User } from '@prisma/client'
 import Userimage from './ui/Userimage'
-import { Heart as HeartIcon } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { HeartIconLink } from './ui/HeartIconLink'
 import { FakeLink } from './ui/FakeLink'
+import { BookmarkIcon } from './ui/BookmarkLink'
 
 export function DesignCard({ design, creator, hearts }: { design: Design, creator: User, hearts?: Heart[] }) {
 
@@ -26,6 +25,7 @@ export function DesignCard({ design, creator, hearts }: { design: Design, creato
                 </FakeLink>
 
                 <div className='flex  items-center gap-2 justify-between '>
+                    <BookmarkIcon designId={design.id} />
                     <HeartIconLink designId={design.id} />
                     <span className='text-[12px]'>{hearts?.length || 3}</span>
                 </div>

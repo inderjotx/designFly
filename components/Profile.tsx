@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -33,10 +32,10 @@ export function Profile() {
                         <Link href={"/profile/" + session.data?.user.id}  >Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Link href={"/profile/" + session.data?.user.id + "/saved"}  >Liked</Link>
+                        <Link href={"/profile/" + session.data?.user.id + "/loved"}  >Liked</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                        <Link href={"/profile/" + session.data?.user.id}  >Bookmarks</Link>
+                        <Link href={"/profile/" + session.data?.user.id + "/bookmark"}   >Bookmarks</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <div onClick={() => signOut()}>Log out</div>

@@ -11,25 +11,31 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  name     String
-  password String?
-  email    String
-  provider String
-  image    String?
-  Design   Design[]
-  bio      String?
-  Heart    Heart[]
+  id        String      @id @default(uuid())
+  name      String
+  password  String?
+  email     String
+  provider  String
+  image     String?
+  Design    Design[]
+  bio       String?
+  Heart     Heart[]
+  BookMark  BookMark[]
+  Followers Followers[] @relation("follower")
+  Following Followers[] @relation("following")
+
+  @@unique([email, provider])
 }
 
 model Design {
-  id          String  @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
   description String
   userId      String
-  user        User    @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
   imageKey    String
   Heart       Heart[]
+  BookMark    BookMark[]
 }
 
 model Heart {
@@ -40,4 +46,23 @@ model Heart {
   user     User   @relation(fields: [userId], references: [id])
 
   @@unique([designId, userId])
+}
+
+model BookMark {
+  id       String @id @default(uuid())
+  design   Design @relation(fields: [designId], references: [id])
+  designId String
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@unique([designId, userId])
+}
+
+model Followers {
+  follower    User   @relation(name: "follower", fields: [followerId], references: [id])
+  followerId  String
+  follwing    User   @relation(name: "following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }

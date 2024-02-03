@@ -9,7 +9,6 @@ import Navbar from '@/components/Navbar'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 
 import './globals.css'
-import { relative } from 'path'
 
 
 const inter = Inter({ subsets: ['latin'] })

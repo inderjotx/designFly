@@ -5,6 +5,7 @@ import HeroImage from "@/public/assets/HeroImage.png"
 import { Github, Instagram, Linkedin } from 'lucide-react'
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
+import { Carousel } from '../ui/Carousel'
 
 const message = "Over 1k people have become part of our community 🎉"
 
@@ -43,8 +44,8 @@ async function Hero() {
             <div>
 
             </div>
-            <div className='h-auto px-10 lg:px-5 '>
-                <Image src={HeroImage} alt='Hero Section Image' className='object-cover rounded-md' quality={100}></Image>
+            <div className='w-full overflow-hidden'>
+                <Carousel />
             </div>
 
             <div className='w-full h-40 mt-5 flex justify-center items-center flex-col space-y-8'>

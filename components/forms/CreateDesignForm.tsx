@@ -17,8 +17,6 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-// const MAX_FILE_SIZE = 499999;
-// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 
 
@@ -152,7 +150,7 @@ export function CreateDesign() {
 
 
     return (
-        <div className='w-full h-full flex justify-center'>
+        <div className='w-full flex justify-center'>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-8 mt-8">
                     <div className='w-full flex justify-between'>

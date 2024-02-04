@@ -4,13 +4,15 @@ import Image from 'next/image'
 import { prisma } from '@/lib/prismadb'
 import { redirect } from 'next/navigation'
 import Userimage from '@/components/ui/Userimage'
-import { BookMarked, Heart } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { HeartIconLink } from '@/components/ui/HeartIconLink'
 import { FakeLink } from '@/components/ui/FakeLink'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { BookmarkIcon } from '@/components/ui/BookmarkLink'
+import { Pencil } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 async function page({ params }: { params: { designId: string } }) {
 
@@ -57,7 +59,12 @@ async function page({ params }: { params: { designId: string } }) {
                     <Userimage name={design.user.name} url={design.user.image as string} className='h-12 w-12' />
                     <h2 className='text-sm cursor-pointer'>{design.user.name}</h2>
                 </FakeLink>
-                <div className='flex gap-6'>
+                <div className={cn('flex gap-6',)}>
+                    <div className={cn("rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center ", design.user.id === session?.user.id ? "flex" : "hidden")}>
+                        <Link href={`/design/${design.id}/edit`}>
+                            <Pencil></Pencil>
+                        </Link>
+                    </div>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
                         <BookmarkIcon color={colorBookmark} designId={design.id} />
                     </div>

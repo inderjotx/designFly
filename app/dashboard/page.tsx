@@ -30,7 +30,7 @@ async function page() {
                 {/* { Add Design } */}
                 <div className=''>
                     <Button variant="default" className='rounded-full px-8' asChild >
-                        <Link href={"/dashboard/create"}>
+                        <Link href={"/designs/create"}>
                             Add Design</Link>
                     </Button>
                 </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import * as z from "zod"
 import { toast } from '../ui/use-toast';
@@ -51,19 +51,22 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
     console.log(initialData)
     console.log(isNew)
 
+
     const session = useSession()
-
     const imageRef = useRef<HTMLInputElement | null>(null)
-
     const [hasImage, setHasImage] = useState<boolean>(false)
-
+    const [image, setImage] = useState<string | null>(imageUrl)
     const router = useRouter()
+
+
 
 
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
         defaultValues: { title, description }
     })
+
+
 
 
     async function uploadNew(values: FormType) {
@@ -248,6 +251,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
 
         if (imageRef.current?.files?.[0]) {
             setHasImage(true)
+            setImage(window.URL.createObjectURL(imageRef.current?.files?.[0]))
         }
         else {
             setHasImage(false)
@@ -284,7 +288,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                                     :
                                     <Image src={ColorCanvas} className='w-40 h-40 object-contain' alt='colorcanvas' />
                                 :
-                                <Image src={imageRef.current?.files?.[0] ? URL.createObjectURL(imageRef.current.files?.[0]) : imageUrl || ""} alt='canvas images' width={1} height={1} unoptimized className='object-cover w-full h-full ' quality={100} />
+                                <Image src={image} alt='canvas images' width={1} height={1} unoptimized className='object-cover w-full h-full ' quality={100} />
                         }
                     </div>
 

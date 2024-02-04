@@ -3,11 +3,13 @@
 import axios from 'axios'
 import { Bookmark } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-export function BookmarkIcon({ designId }: { designId: string }) {
+export function BookmarkIcon({ designId, color }: { designId: string, color: string }) {
 
     const session = useSession()
+    const router = useRouter()
 
     async function handleLike() {
         try {
@@ -17,6 +19,8 @@ export function BookmarkIcon({ designId }: { designId: string }) {
                     designId: designId
                 }
             })
+
+            router.refresh()
         }
         catch (error) {
 
@@ -25,7 +29,7 @@ export function BookmarkIcon({ designId }: { designId: string }) {
 
 
     return (
-        <Bookmark className='h-6 w-6 cursor-pointer ' onClick={handleLike} />
+        <Bookmark fill={color} className='h-6 w-6 cursor-pointer transition-all ' onClick={handleLike} />
 
     )
 }

@@ -3,11 +3,13 @@
 import axios from 'axios'
 import { HeartIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-export function HeartIconLink({ designId }: { designId: string }) {
+export function HeartIconLink({ designId, color }: { designId: string, color: string }) {
 
     const session = useSession()
+    const router = useRouter()
 
     async function handleLike() {
         try {
@@ -17,6 +19,7 @@ export function HeartIconLink({ designId }: { designId: string }) {
                     designId: designId
                 }
             })
+            router.refresh()
         }
         catch (error) {
 
@@ -25,6 +28,6 @@ export function HeartIconLink({ designId }: { designId: string }) {
 
 
     return (
-        <HeartIcon className='h-6 w-6 cursor-pointer' onClick={handleLike} />
+        <HeartIcon fill={color} className='h-6 w-6 cursor-pointer transition-all' onClick={handleLike} />
     )
 }

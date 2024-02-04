@@ -8,7 +8,7 @@ function Userimage({ name, url, className }: { name: string, url?: string, class
 
     if (url) {
 
-        return <Image width={1} height={1} src={url} priority unoptimized={true} alt='user-image' className={cn('object-contain border border-muted-foreground cursor-pointer rounded-full h-10 w-10', className)} ></Image>
+        return <Image width={1} height={1} src={url} unoptimized alt='user-image' className={cn('object-contain border border-muted-foreground cursor-pointer rounded-full h-10 w-10', className)} ></Image>
     }
 
 

@@ -12,7 +12,8 @@ export async function DesignGridUser({ userId }: { userId: string }) {
         include: {
             Design: {
                 include: {
-                    Heart: true
+                    Heart: true,
+                    BookMark: true
                 }
             }
         }
@@ -31,7 +32,7 @@ export async function DesignGridUser({ userId }: { userId: string }) {
                 {
                     designs.map((design, index) => (
                         <div className='' key={index}>
-                            <DesignCard design={design} creator={user} hearts={design.Heart} />
+                            <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
                         </div>
                     ))
                 }

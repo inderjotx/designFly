@@ -21,7 +21,9 @@ export default async function Page({ params }: { params: { saved: string, userId
             include: {
                 design: {
                     include: {
-                        Heart: true
+                        Heart: true,
+                        BookMark: true
+
                     }
                 },
                 user: true
@@ -39,7 +41,7 @@ export default async function Page({ params }: { params: { saved: string, userId
 
                         hearts.map(({ design, user }, index) => (
                             <div className='' key={index}>
-                                <DesignCard design={design} creator={user} hearts={design.Heart} />
+                                <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
                             </div>
                         ))
                     }
@@ -57,8 +59,10 @@ export default async function Page({ params }: { params: { saved: string, userId
             include: {
                 design: {
                     include: {
-                        Heart: true
+                        Heart: true,
+                        BookMark: true
                     }
+
                 },
                 user: true
             }
@@ -75,7 +79,7 @@ export default async function Page({ params }: { params: { saved: string, userId
 
                         bookmarks.map(({ design, user }, index) => (
                             <div className='' key={index}>
-                                <DesignCard design={design} creator={user} hearts={design.Heart} />
+                                <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
                             </div>
                         ))
                     }

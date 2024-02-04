@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ message: "You can't follow yourself" }, { status: 400 })
     }
 
-    if (intension == "follow") {
+    if (intension == "Follow") {
 
         try {
 
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
             }
         })
 
-        return NextResponse.json({ message: "something happened" }, { status: 400 })
+        return NextResponse.json({ message: "Unfollowed succesffully" }, { status: 200 })
 
     }
 

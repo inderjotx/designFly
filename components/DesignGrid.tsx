@@ -1,8 +1,7 @@
 import { prisma } from '@/lib/prismadb'
 import React from 'react'
 import { DesignCard } from './DesignCard'
-import Link from 'next/link'
-import { FakeLink } from './ui/FakeLink'
+
 export async function DesignGrid() {
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
@@ -13,7 +12,8 @@ export async function DesignGrid() {
         },
         include: {
             user: true,
-            Heart: true
+            Heart: true,
+            BookMark: true
         }
     })
 
@@ -25,7 +25,7 @@ export async function DesignGrid() {
             {
                 designs.map((design, index) => (
                     <div className='' key={index}>
-                        <DesignCard design={design} creator={design.user} hearts={design.Heart} />
+                        <DesignCard bookmarks={design.BookMark} design={design} creator={design.user} hearts={design.Heart} />
                     </div>
                 ))
             }

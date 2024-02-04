@@ -7,8 +7,18 @@ import Userimage from '@/components/ui/Userimage'
 import { BookMarked, Heart } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { HeartIconLink } from '@/components/ui/HeartIconLink'
+import { FakeLink } from '@/components/ui/FakeLink'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { BookmarkIcon } from '@/components/ui/BookmarkLink'
 
 async function page({ params }: { params: { designId: string } }) {
+
+
+    const session = await getServerSession(authOptions)
+
+
+
 
     const design = await prisma.design.findUnique({
         where: {
@@ -17,7 +27,9 @@ async function page({ params }: { params: { designId: string } }) {
         ,
         include: {
             Heart: true,
-            user: true
+            user: true,
+            BookMark: true
+
         }
 
     })
@@ -27,20 +39,30 @@ async function page({ params }: { params: { designId: string } }) {
         redirect('/')
     }
 
+    const URL = process.env.NEXT_PUBLIC_SITE_URL
+
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+    const hasLiked = design.Heart?.find(({ userId }) => userId == session?.user.id) ? true : false
+    const hasBookmarked = design.BookMark?.find(({ userId }) => userId == session?.user.id) ? true : false
+    const colorHeart = hasLiked ? "#FF8080" : "white"
+    const colorBookmark = hasBookmarked ? "#F8E559" : "white"
+
+
 
     return (
         <div className='flex  items-center mx-4 mt-8 px-8 py-4  flex-col gap-4 '>
             <div className='w-full lg:w-3/4 flex justify-between'>
-                <div className='flex items-center justify-start gap-4'>
+                <FakeLink className='flex items-center justify-start gap-4' url={`${URL}/profile/${design.user.id}`} >
                     <Userimage name={design.user.name} url={design.user.image as string} className='h-12 w-12' />
-                    <h2 className='text-sm'>{design.user.name}</h2>
-                </div>
+                    <h2 className='text-sm cursor-pointer'>{design.user.name}</h2>
+                </FakeLink>
                 <div className='flex gap-6'>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
-                        <BookMarked />
+                        <BookmarkIcon color={colorBookmark} designId={design.id} />
                     </div>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
-                        <HeartIconLink designId={params.designId} />
+                        <HeartIconLink color={colorHeart} designId={design.id} />
                     </div>
                 </div>
 

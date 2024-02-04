@@ -6,7 +6,6 @@ import { FakeLink } from './ui/FakeLink'
 import { BookmarkIcon } from './ui/BookmarkLink'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { CodeSquare } from 'lucide-react'
 
 export async function DesignCard({ design, creator, hearts, bookmarks }: { design: Design, creator: User, hearts?: Heart[], bookmarks: BookMark[] }) {
 

@@ -16,6 +16,7 @@ import ColorCanvas from "@/public/assets/ImageLogo.png"
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Design } from '@prisma/client';
 
 
 
@@ -32,8 +33,23 @@ const FormSchema = z.object({
 type FormType = z.infer<typeof FormSchema>
 
 
+interface CreateDesignProps {
+    initialData: Design | null
+}
 
-export function CreateDesign() {
+
+
+
+export function CreateDesign({ initialData }: CreateDesignProps) {
+
+    const title = initialData?.title || ""
+    const description = initialData?.description || ""
+    const imageUrl = initialData?.imageKey || null
+
+    const isNew = initialData?.id ? false : true
+    console.log('innital data')
+    console.log(initialData)
+    console.log(isNew)
 
     const session = useSession()
 
@@ -46,30 +62,16 @@ export function CreateDesign() {
 
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
-        defaultValues: {
-            title: "",
-            description: ""
-        }
+        defaultValues: { title, description }
     })
 
 
-
-    async function onSubmit(values: FormType) {
-
-        console.log("image data")
+    async function uploadNew(values: FormType) {
         const selectedImage = imageRef.current?.files?.[0]
-
-
-        console.log(selectedImage?.name)
-
-
-        console.log("all data")
-        console.log(values)
 
         if (!selectedImage) {
             alert("select image first ")
         }
-
 
         try {
 
@@ -121,6 +123,94 @@ export function CreateDesign() {
                 console.log("error occured ")
             }
 
+        }
+
+
+
+
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+
+    async function editOld(values: FormType) {
+
+        const selectedImage = imageRef.current?.files?.[0]
+
+        try {
+
+            if (hasImage) {
+
+                const { data } = await axios.post('/api/get-image-url', {
+                    userId: session.data?.user.id,
+                    imageName: selectedImage?.name
+                })
+
+
+
+                console.log("response from create image ")
+                console.log(data.url)
+                console.log(data.imageKey)
+
+
+                const imageKey = data.imageKey
+                const presignedUrl = data.url
+
+
+
+                // store the image 
+                const headers = { 'Content-Type': selectedImage?.type }
+
+
+                const response = await axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
+
+
+                console.log("response after sending the image to s3")
+                console.log(response)
+
+                if (response.status == 200) {
+
+                    const response = await axios.patch('/api/add-design', {
+                        title: values.title,
+                        description: values.description,
+                        imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
+                        userId: session.data?.user.id,
+                        id: initialData?.id
+                    })
+
+                    console.log("response from user creation ")
+                    console.log(response)
+
+                    // give a toast and then move 
+                    router.push('/dashboard')
+                }
+
+                else {
+                    console.log("error occured ")
+                }
+            }
+
+            // normal patch 
+            else {
+
+                console.log("Image has not been updated")
+
+                const response = await axios.patch('/api/add-design', {
+                    title: values.title,
+                    description: values.description,
+                    imageKey: initialData?.imageKey,
+                    userId: session.data?.user.id,
+                    id: initialData?.id
+                })
+
+                console.log("response from user creation ")
+                console.log(response)
+
+                // give a toast and then move 
+                router.push('/dashboard')
+
+            }
 
 
 
@@ -132,6 +222,24 @@ export function CreateDesign() {
         catch (err) {
             console.log(err)
         }
+    }
+
+
+
+
+    async function onSubmit(values: FormType) {
+
+
+        // post 
+        if (isNew) {
+            await uploadNew(values)
+        }
+
+        // patch 
+        else {
+            await editOld(values)
+        }
+
     }
 
 
@@ -170,12 +278,13 @@ export function CreateDesign() {
                         />
 
                         {
-                            hasImage ?
+                            isNew ?
                                 //@ts-ignore
-                                <Image priority={false} placeholder='empty' src={URL.createObjectURL(imageRef.current.files?.[0])} alt='canvas images' width={100} height={100} className='object-cover w-full h-full ' quality={100} />
-                                // <MyCarousel files={Array.from(selectedImage)} />
+                                hasImage ? <Image src={URL.createObjectURL(imageRef.current.files?.[0])} alt='canvas' width={100} height={100} className='object-cover w-full h-full ' quality={100} />
+                                    :
+                                    <Image src={ColorCanvas} className='w-40 h-40 object-contain' alt='colorcanvas' />
                                 :
-                                <Image src={ColorCanvas} priority={false} placeholder='empty' className='w-40 h-40 object-contain' alt='colorcanvas' />
+                                <Image src={imageRef.current?.files?.[0] ? URL.createObjectURL(imageRef.current.files?.[0]) : imageUrl || ""} alt='canvas images' width={1} height={1} unoptimized className='object-cover w-full h-full ' quality={100} />
                         }
                     </div>
 

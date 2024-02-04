@@ -61,7 +61,7 @@ async function page({ params }: { params: { designId: string } }) {
                 </FakeLink>
                 <div className={cn('flex gap-6',)}>
                     <div className={cn("rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center ", design.user.id === session?.user.id ? "flex" : "hidden")}>
-                        <Link href={`/design/${design.id}/edit`}>
+                        <Link href={`/designs/${design.id}/edit`}>
                             <Pencil></Pencil>
                         </Link>
                     </div>

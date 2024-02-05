@@ -29,7 +29,7 @@ export async function DesignCard({ design, creator, hearts, bookmarks }: { desig
 
             <FakeLink className='cursor-pointer' url={`${baseUrl}/designs/${design.id}`} >
                 <div className='h-64 overflow-hidden rounded-md relative'>
-                    <Image fill src={design.imageKey} quality={100} className='h-full w-full rounded-md object-cover' alt="design image" />
+                    <Image fill src={design.imageKey} sizes='100vh' quality={100} className='h-full w-full rounded-md object-cover' alt="design image" />
                 </div>
             </FakeLink>
             <div className='flex items-center justify-between px-2'>

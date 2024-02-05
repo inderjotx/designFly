@@ -9,6 +9,7 @@ interface designProps {
     description: string,
     imageKey: string,
     id: string
+    tags?: string[]
 }
 
 
@@ -35,6 +36,16 @@ export async function POST(req: Request) {
                 ...design
             }
         })
+
+        if (design.tags && design.tags.length > 0) {
+
+            const postTags = design.tags.map((tagName) => ({ designId: responseFromPrism.id, tagName: tagName }))
+            const createTags = await prisma.postTag.createMany({
+                data: postTags
+            })
+        }
+
+
 
         console.log("responseFromPrism")
         console.log(responseFromPrism)
@@ -71,6 +82,12 @@ export async function PATCH(req: NextRequest) {
         return Response.json("Design is required ", { status: 400 })
     }
 
+    const prev = await prisma.postTag.findMany({
+        where: {
+            designId: design.id
+        }
+    })
+
 
     try {
 
@@ -84,6 +101,11 @@ export async function PATCH(req: NextRequest) {
             }
 
         })
+
+
+
+
+
 
         console.log("responseFromPrism")
         console.log(responseFromPrism)

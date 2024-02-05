@@ -36,11 +36,12 @@ model Design {
   imageKey    String
   Heart       Heart[]
   BookMark    BookMark[]
+  PostTag     PostTag[]
 }
 
 model Heart {
   id       String @id @default(uuid())
-  design   Design @relation(fields: [designId], references: [id])
+  design   Design @relation(fields: [designId], references: [id], onDelete: Cascade)
   designId String
   userId   String
   user     User   @relation(fields: [userId], references: [id])
@@ -50,7 +51,7 @@ model Heart {
 
 model BookMark {
   id       String @id @default(uuid())
-  design   Design @relation(fields: [designId], references: [id])
+  design   Design @relation(fields: [designId], references: [id], onDelete: Cascade)
   designId String
   userId   String
   user     User   @relation(fields: [userId], references: [id])
@@ -65,4 +66,19 @@ model Followers {
   followingId String
 
   @@id([followerId, followingId])
+}
+
+model Tag {
+  name    String    @id
+  PostTag PostTag[]
+}
+
+model PostTag {
+  designId String
+  tagName  String
+
+  Post Design @relation(fields: [designId], references: [id])
+  tag  Tag    @relation(fields: [tagName], references: [name])
+
+  @@id([designId, tagName])
 }

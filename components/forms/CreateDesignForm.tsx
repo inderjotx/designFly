@@ -17,6 +17,9 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Design } from '@prisma/client';
+import { Tag, X } from 'lucide-react';
+import { Tags } from '../ui/Tags';
+import { Badge } from '../ui/badge';
 
 
 
@@ -46,6 +49,8 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
     const description = initialData?.description || ""
     const imageUrl = initialData?.imageKey || null
 
+
+
     const isNew = initialData?.id ? false : true
     console.log('innital data')
     console.log(initialData)
@@ -55,18 +60,24 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
     const session = useSession()
     const imageRef = useRef<HTMLInputElement | null>(null)
     const [hasImage, setHasImage] = useState<boolean>(false)
+    const [selectedTags, setSelectedTags] = useState<string[]>([])
     const [image, setImage] = useState<string | null>(imageUrl)
     const router = useRouter()
 
 
 
-
+    console.log(selectedTags)
     const form = useForm<FormType>({
         resolver: zodResolver(FormSchema),
         defaultValues: { title, description }
     })
 
 
+    function removeTag(index: number) {
+        const array = selectedTags
+        const newArray = [...selectedTags.slice(0, index), ...selectedTags.slice(index + 1)]
+        setSelectedTags(newArray)
+    }
 
 
     async function uploadNew(values: FormType) {
@@ -112,7 +123,9 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                     title: values.title,
                     description: values.description,
                     imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
-                    userId: session.data?.user.id
+                    userId: session.data?.user.id,
+                    tags: selectedTags
+
                 })
 
                 console.log("response from user creation ")
@@ -269,6 +282,18 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                         <Button type="button" className='rounded-full px-6' variant="outline" asChild><Link href={"/"}>Cancel</Link></Button>
                         <Button type="submit" className='rounded-full px-6'>Create</Button>
                     </div>
+                    <div className='flex items-center gap-4 '>
+                        <div>
+                            <Tags selected={selectedTags} setSelectedTags={setSelectedTags} />
+                        </div>
+                        <div className='flex gap-3'>
+                            {
+                                selectedTags.map((tag, index) => (
+                                    <Badge key={tag} className='p-2 rounded-lg font-normal' variant={"outline"} >{tag} <X className='ml-2 cursor-pointer' size={"15"} onClick={() => removeTag(index)} ></X></Badge>
+                                ))
+                            }
+                        </div>
+                    </div>
                     <div className='relative h-80 border-2 bg-background flex justify-center items-center border-black/60 dark:border-white/60  border-dashed rounded-md'>
                         <Input
                             type='file'
@@ -288,7 +313,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                                     :
                                     <Image src={ColorCanvas} className='w-40 h-40 object-contain' alt='colorcanvas' />
                                 :
-                                <Image src={image} alt='canvas images' width={1} height={1} unoptimized className='object-cover w-full h-full ' quality={100} />
+                                <Image src={image || ""} alt='canvas images' width={1} height={1} unoptimized className='object-cover w-full h-full ' quality={100} />
                         }
                     </div>
 

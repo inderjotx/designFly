@@ -7,6 +7,7 @@ import React from 'react'
 // import DesignsComponent from '@/components/sections/DesignsComponent'
 import { Separator } from '@/components/ui/separator'
 import { DesignGrid } from '@/components/DesignGrid'
+import { Tags } from '@/components/ui/Tags'
 
 async function page() {
 
@@ -20,6 +21,8 @@ async function page() {
 
     return (
         <div className='flex mx-3 flex-col items-center gap-4'>
+
+
 
             <div className='w-11/12 lg:w-10/12 mt-10 h-10 flex justify-between items-center  '>
                 {/* { two new / our designs } */}
@@ -40,6 +43,7 @@ async function page() {
             <div className='w-11/12 lg:w-10/12 flex justify-center'>
                 <DesignGrid />
             </div>
+
         </div>
     )
 }

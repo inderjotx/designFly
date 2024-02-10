@@ -4,27 +4,36 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 import React from 'react'
-// import DesignsComponent from '@/components/sections/DesignsComponent'
 import { Separator } from '@/components/ui/separator'
 import { DesignGrid } from '@/components/DesignGrid'
 import { Tags } from '@/components/ui/Tags'
+import { prisma } from '@/lib/prismadb'
+import { Badge } from '@/components/ui/badge'
+import { Compass } from 'lucide-react'
+import { MyBadge } from '@/components/ui/MyBadge'
 
-async function page() {
-
-    const session = await getServerSession({})
+export default async function Layout({ children }: { children: React.ReactNode }) {
 
 
-
+    const tags = await prisma.tag.findMany()
 
     return (
         <div className='flex mx-3 flex-col items-center gap-4'>
 
-
-
             <div className='w-11/12 lg:w-10/12 mt-10 h-10 flex justify-between items-center  '>
                 {/* { two new / our designs } */}
-                <div className='space-x-3'>
-                    <Link href={'/'} className='bg-' >New Design</Link>
+                <div className='space-x-3 flex items-center'>
+                    <Link href={'/dashboard/new'}>
+                        <MyBadge name={'new'} />
+                    </Link>
+                    {
+                        tags.map((tag) => (
+                            <Link key={tag.name} href={`/dashboard/${tag.name}`} >
+                                <MyBadge name={tag.name} />
+                            </Link>
+                        ))
+                    }
+
                 </div>
 
                 {/* { Add Design } */}
@@ -38,11 +47,9 @@ async function page() {
             </div>
             <Separator className='w-11/12 lg:w-10/12' />
             <div className='w-11/12 lg:w-10/12 flex justify-center'>
-                <DesignGrid />
+                {children}
             </div>
 
         </div>
     )
 }
-
-export default page

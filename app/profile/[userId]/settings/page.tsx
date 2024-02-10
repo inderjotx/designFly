@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import axios from "axios"
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { redirect, useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from 'react-hot-toast'
@@ -72,7 +72,6 @@ export default function Page() {
                 const promises = Promise.all([s3PutResponse, responsePromise])
 
                 toast.promise(promises, {
-
                     loading: "Updating User Information .....",
                     success: "Successfully Updated Information",
                     error: "Error Updating Information"
@@ -81,6 +80,7 @@ export default function Page() {
                         setUserData((prev) => ({ ...prev, image: newImage }))
                         setCanEdit(false)
                         signOut()
+                        router.push('/signIn')
                     })
                 console.log("response from update update data")
 

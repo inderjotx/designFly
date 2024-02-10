@@ -20,6 +20,7 @@ import { Tag, X } from 'lucide-react';
 import { Tags } from '../ui/Tags';
 import { Badge } from '../ui/badge';
 import { toast } from 'react-hot-toast'
+import { cn } from '@/lib/utils';
 
 
 
@@ -205,7 +206,6 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
 
 
                 const promises = Promise.all([updaignDesignPromise, uploadingImagePromise])
-
                 toast.promise(promises, {
                     error: "Error updating Design",
                     success: "Successfully updated design",
@@ -299,7 +299,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                     </div>
                     <div className='flex items-center gap-4 '>
                         <div>
-                            <Tags selected={selectedTags} setSelectedTags={setSelectedTags} />
+                            <Tags className={cn(initialData && "hidden")} selected={selectedTags} setSelectedTags={setSelectedTags} />
                         </div>
                         <div className='flex gap-3'>
                             {

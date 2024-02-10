@@ -77,8 +77,8 @@ model PostTag {
   designId String
   tagName  String
 
-  Post Design @relation(fields: [designId], references: [id])
-  tag  Tag    @relation(fields: [tagName], references: [name])
+  Post Design @relation(fields: [designId], references: [id], onDelete: Cascade)
+  tag  Tag    @relation(fields: [tagName], references: [name], onDelete: Cascade)
 
   @@id([designId, tagName])
 }

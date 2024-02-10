@@ -17,8 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 import { toast } from 'react-hot-toast'
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
     email: z.string().min(1).email("This is not a valid email "),
@@ -38,6 +38,7 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
 
     // const [providers, setProviders] = useState([])
 
+    const router = useRouter()
 
 
 
@@ -50,18 +51,23 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
     })
 
     async function onSubmit(values: formSchemaType) {
-        console.log(values)
 
         const response = await signIn("credentials", {
             password: values.password,
             email: values.email,
             redirect: true,
-            callbackUrl: callbackUrl ?? "http://localhost:3000"
+            callbackUrl: callbackUrl ?? "http://localhost:3000/dashboard"
         })
 
-        console.log("response")
-        console.log(response)
-        console.log(error)
+
+        if (error) {
+            console.log(error)
+            toast.error("Wrong credentials")
+        }
+
+        else {
+            toast.success("Successfully Logged In")
+        }
 
     }
 

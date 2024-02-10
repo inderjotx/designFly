@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prismadb"
+import { revalidatePath } from "next/cache"
 
 interface updateUserProps {
     userId: string,
@@ -13,6 +14,7 @@ interface updateUserProps {
 export async function POST(req: Request) {
 
     const data: updateUserProps = await req.json()
+
 
     console.log("data inside the update user profile ")
     console.log(data)
@@ -48,6 +50,8 @@ export async function POST(req: Request) {
                 image: data.image,
             }
         })
+
+        revalidatePath(`/profile/${isUser.id}`)
 
         return Response.json({ message: "User data updated succesfully " }, { status: 200 })
 

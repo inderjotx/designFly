@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import axios from 'axios'
 import { Bookmark } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -43,7 +44,7 @@ export function BookmarkIcon({ designId, color, hasBookmarked }: { designId: str
 
 
     return (
-        <Bookmark fill={color} className='h-6 w-6 cursor-pointer transition-all ' onClick={handleLike} />
+        <Bookmark fill={color} color="black" className='h-6 w-6 cursor-pointer transition-all  ' onClick={handleLike} />
 
     )
 }

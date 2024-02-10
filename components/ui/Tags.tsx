@@ -15,7 +15,7 @@ import {
 
 
 
-export function Tags({ selected, setSelectedTags }: { selected: string[], setSelectedTags: React.Dispatch<string[]> }) {
+export function Tags({ selected, setSelectedTags, className }: { className: string, selected: string[], setSelectedTags: React.Dispatch<string[]> }) {
 
     const [tags, setTags] = useState<string[] | []>([])
 
@@ -43,11 +43,11 @@ export function Tags({ selected, setSelectedTags }: { selected: string[], setSel
     }
 
     return (
-        <Select onValueChange={handleChange}>
+        <Select onValueChange={handleChange}  >
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select Tags" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={className}>
                 <SelectGroup>
                     <SelectLabel>Tags</SelectLabel>
                     {tags.map((tag) => (

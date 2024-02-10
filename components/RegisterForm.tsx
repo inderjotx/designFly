@@ -10,7 +10,6 @@ import { signIn } from "next-auth/react"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -18,8 +17,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useToast } from "./ui/use-toast"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { toast } from 'react-hot-toast'
 
 const formSchema = z.object({
     username: z.string().min(2, "Name Should atleast have 5 characters").max(50),
@@ -32,7 +31,7 @@ type formSchemaType = z.infer<typeof formSchema>
 
 export function RegisterForm() {
 
-    const { toast } = useToast()
+    const router = useRouter()
 
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema),
@@ -59,16 +58,18 @@ export function RegisterForm() {
         console.log("data")
         console.log(data)
 
-        if (data && data.message) {
-            const variant = (data.code == 0) ? "default" : "destructive"
-            toast({
-                variant: variant,
-                description: data.message
-            })
+
+
+
+        if (data && data.message && data.code == 0) {
+
+            toast.success(data.message)
+            router.push('/signIn')
         }
 
-        if (data && data.code && data.code == 0) {
-            redirect("/")
+
+        else {
+            toast.error(data.message)
         }
 
 

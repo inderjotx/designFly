@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prismadb";
 import { User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 
 interface designProps {
@@ -112,6 +113,9 @@ export async function PATCH(req: NextRequest) {
 
         console.log("responseFromPrism")
         console.log(responseFromPrism)
+
+
+        revalidatePath('/dashboard')
 
         return Response.json("user created succesfully", { status: 200 })
 

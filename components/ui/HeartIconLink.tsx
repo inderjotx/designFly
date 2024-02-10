@@ -39,6 +39,6 @@ export function HeartIconLink({ designId, color, hasLiked }: { designId: string,
 
 
     return (
-        <HeartIcon fill={color} className='h-6 w-6 cursor-pointer transition-all' onClick={handleLike} />
+        <HeartIcon color="black" fill={color} className='h-6 w-6 cursor-pointer transition-all' onClick={handleLike} />
     )
 }

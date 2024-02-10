@@ -16,11 +16,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { signIn } from "next-auth/react"
-import { useToast } from "./ui/use-toast"
 import Link from "next/link"
-import LoginImage from "@/public/assets/login.jpg"
-import Image from "next/image"
 import { redirect } from "next/navigation"
+import { toast } from 'react-hot-toast'
 
 const formSchema = z.object({
     email: z.string().min(1).email("This is not a valid email "),
@@ -37,7 +35,6 @@ type formSchemaType = z.infer<typeof formSchema>
 
 export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: string }) {
 
-    const { toast } = useToast()
 
     // const [providers, setProviders] = useState([])
 
@@ -51,30 +48,6 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
             email: ""
         },
     })
-
-    // useEffect(() => {
-
-
-    //     async function configureProviders() {
-
-    //         const providers = await getProviders()
-    //         console.log(providers)
-    //         setProviders(providers)
-
-    //     }
-
-
-
-
-    //     // toast({
-    //     //     variant: "destructive",
-    //     //     description: error,
-    //     //     title: "Login Error"
-    //     // })
-
-
-    // }, [])
-
 
     async function onSubmit(values: formSchemaType) {
         console.log(values)
@@ -95,12 +68,21 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
 
     async function handleGoogleLogin() {
 
-        await signIn("google", {
+        const response = await signIn("google", {
             redirect: true,
             callbackUrl: "http://localhost:3000"
         })
 
-        redirect("/dashboard")
+
+        // toast.promise(response, {
+        //     loading: "Logging ....",
+        //     "success": "Successfully Logged In",
+        //     "error": "Error Logging In"
+        // })
+
+        toast.success("Successfully Logged In")
+
+        // redirect("/dashboard")
 
         // if (providers && providers.google) {
         //     await signIn(providers?.google?.id)

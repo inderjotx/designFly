@@ -46,7 +46,7 @@ function Navbar() {
                     </div>
                     :
                     <div className='flex items-center space-x-4'>
-                        <div className='cursor-pointer' onClick={() => signIn()}>Sign In</div>
+                        <Link className='cursor-pointer' href={"/signIn"}>Login</Link>
                         <Link className='bg-secondary-foreground text-primary-foreground p-2 rounded-full px-4' href={"/register"}> Register</Link>
                     </div>
 

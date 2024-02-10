@@ -3,23 +3,37 @@
 import axios from 'axios'
 import { Bookmark } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import { redirect, useRouter } from 'next/navigation'
 
-export function BookmarkIcon({ designId, color }: { designId: string, color: string }) {
+import React from 'react'
+import toast from 'react-hot-toast'
+
+export function BookmarkIcon({ designId, color, hasBookmarked }: { designId: string, color: string, hasBookmarked: boolean }) {
 
     const session = useSession()
     const router = useRouter()
+    const message = hasBookmarked ? "Remov" : "Add"
+
 
     async function handleLike() {
+
+        if (!session.data) {
+            router.push('/signIn')
+        }
+
         try {
-            const response = await axios.get('/api/bookmark', {
+            const response = axios.get('/api/bookmark', {
                 params: {
                     userId: session.data?.user.id,
                     designId: designId
                 }
             })
 
+            toast.promise(response, {
+                loading: `${message}ing Bookmark`,
+                success: `${message}ed Bookmark`,
+                error: `Error ${message}ing Bookmark`
+            })
             router.refresh()
         }
         catch (error) {

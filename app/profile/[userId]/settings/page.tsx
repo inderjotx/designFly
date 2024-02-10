@@ -7,12 +7,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import axios from "axios"
-import { signOut, useSession } from "next-auth/react"
+import { signIn, signOut, useSession } from "next-auth/react"
+import { redirect, useRouter } from "next/navigation"
 import { useRef, useState } from "react"
+import { toast } from 'react-hot-toast'
 
 export default function Page() {
 
     const session = useSession()
+
+    if (!session.data?.user) {
+        redirect('/signIn')
+    }
+
+    const router = useRouter()
 
     const [canEdit, setCanEdit] = useState<boolean>(false)
 
@@ -29,6 +37,7 @@ export default function Page() {
 
 
     async function updateUserData() {
+
 
         try {
 
@@ -48,50 +57,56 @@ export default function Page() {
                 // send the image first to the s3 
                 const file = imageRef.current?.files?.[0]
                 console.log(file)
-                const s3Response = await axios.put(url, file, { headers: { 'Content-Type': file?.type } })
+                const s3PutResponse = axios.put(url, file, { headers: { 'Content-Type': file?.type } })
 
-                console.log("respnse form s3 ")
-                console.log(s3Response)
 
-                const response = await axios.post("/api/update-profile", {
-                    ...userData,
-                    userId: session.data?.user.id
-                })
                 const newImage = "https://designfly.s3.amazonaws.com/" + imageKey
 
-                console.log("response from update update data")
-                console.log(response)
 
-                // this fucking state is not updateing , so udating using the variable 
-                setUserData((prev) => ({ ...prev, image: newImage }))
-
-                console.log("value from state")
-                console.log(userData.image)
-
-                console.log("value from variable ")
-                console.log(newImage)
-
-                const hasUpdate = await axios.post("/api/update-profile", {
+                const responsePromise = axios.post("/api/update-profile", {
                     ...userData,
                     image: newImage,
                     userId: session.data?.user.id
                 })
-                console.log("response from update update data")
-                console.log(hasUpdate)
 
-                setCanEdit(false)
-                signOut()
+                const promises = Promise.all([s3PutResponse, responsePromise])
+
+                toast.promise(promises, {
+
+                    loading: "Updating User Information .....",
+                    success: "Successfully Updated Information",
+                    error: "Error Updating Information"
+                })
+                    .then(() => {
+                        setUserData((prev) => ({ ...prev, image: newImage }))
+                        setCanEdit(false)
+                        signOut()
+                    })
+                console.log("response from update update data")
+
+
+
+
+
 
 
             }
             else {
 
-                const response = await axios.post("/api/update-profile", {
+                const response = axios.post("/api/update-profile", {
                     ...userData,
                     userId: session.data?.user.id
                 })
+
+                toast.promise(response, {
+                    loading: "Updating User Information .....",
+                    success: "Successfully Updated Information",
+                    error: "Error Updating Information"
+                })
+
                 console.log("response from update update data")
                 console.log(response)
+                router.push('/dashboard')
             }
 
 

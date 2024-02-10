@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 export function DeleteIcon({ designId, color }: { designId: string, color: string }) {
 
@@ -12,25 +13,35 @@ export function DeleteIcon({ designId, color }: { designId: string, color: strin
     const router = useRouter()
 
     async function handleDelete() {
-        try {
-            const response = await axios.get('/api/delete-design', {
-                params: {
-                    userId: session.data?.user.id,
-                    designId: designId
+        const response = axios.get('/api/delete-design', {
+            params: {
+                userId: session.data?.user.id,
+                designId: designId
+            }
+        })
+
+        toast.promise(response, {
+            loading: `Deleting Design...`,
+            success: `Successfully deleted Design`,
+            error: `Error Deleting Design`
+        })
+            .then(
+                () => {
+                    router.push('/dashboard')
+                    router.refresh()
                 }
+            )
+
+            .catch((error) => {
+
+                console.log(error)
             })
 
-            router.push('/dashboard')
-            router.refresh()
-        }
-        catch (error) {
-
-        }
     }
 
 
     return (
-        <X fill={color} className='h-6 w-6 cursor-pointer transition-all ' onClick={handleDelete} />
+        <X className='h-6 w-6 cursor-pointer transition-all ' onClick={handleDelete} />
 
     )
 }

@@ -11,6 +11,7 @@ export async function DesignCard({ design, creator, hearts, bookmarks }: { desig
 
     const session = await getServerSession(authOptions)
 
+
     console.log("Session user id ")
     console.log(session?.user.id)
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
@@ -40,8 +41,8 @@ export async function DesignCard({ design, creator, hearts, bookmarks }: { desig
                 </FakeLink>
 
                 <div className='flex  items-center gap-2 justify-between '>
-                    <BookmarkIcon color={colorBookmark} designId={design.id} />
-                    <HeartIconLink color={colorHeart} designId={design.id} />
+                    <BookmarkIcon color={colorBookmark} hasBookmarked={hasBookmarked} designId={design.id} />
+                    <HeartIconLink color={colorHeart} hasLiked={hasLiked} designId={design.id} />
                     <span className='text-[12px]'>{hearts?.length || 0}</span>
                 </div>
             </div>

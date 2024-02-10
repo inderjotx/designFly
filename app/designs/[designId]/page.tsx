@@ -70,10 +70,10 @@ async function page({ params }: { params: { designId: string } }) {
                         </Link>
                     </div>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
-                        <BookmarkIcon color={colorBookmark} designId={design.id} />
+                        <BookmarkIcon color={colorBookmark} hasBookmarked={hasBookmarked} designId={design.id} />
                     </div>
                     <div className='rounded-full border border-foreground/10 hover:bg-foreground/5 w-12 h-12 flex justify-center items-center'>
-                        <HeartIconLink color={colorHeart} designId={design.id} />
+                        <HeartIconLink color={colorHeart} hasLiked={hasLiked} designId={design.id} />
                     </div>
                 </div>
 

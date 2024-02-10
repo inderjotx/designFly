@@ -1,20 +1,28 @@
 'use client'
 
 import axios from 'axios'
-import { Plus } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 export default function FollowButton({ followerId, followingId, intension }:
     { followerId: string, followingId: string, intension: string }) {
 
     const router = useRouter()
+    const session = useSession()
 
     async function handleFollow() {
+
+
+        if (!session.data?.user) {
+            router.push('/signIn')
+        }
+
         try {
 
 
-            const response = await axios.get('http://localhost:3000/api/follow', {
+            const response = axios.get('http://localhost:3000/api/follow', {
                 params: {
                     followerId,
                     followingId,
@@ -22,6 +30,11 @@ export default function FollowButton({ followerId, followingId, intension }:
                 }
             })
 
+            toast.promise(response, {
+                loading: `${intension}ing ...`,
+                success: `${intension}ed`,
+                error: `Error ${intension}`
+            })
             console.log('repsonse from follow')
             console.log(response)
 

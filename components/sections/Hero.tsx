@@ -34,7 +34,7 @@ async function Hero() {
 
             <div>
                 <Button className='rounded-full px-20 py-6 text-lg'>
-                    <Link href={user ? "/dashboard" : "/register"} >
+                    <Link href={'/dashboard'} >
                         Get Started
                     </Link>
 

@@ -13,9 +13,6 @@ async function page() {
 
     const session = await getServerSession({})
 
-    if (!session) {
-        redirect('/register')
-    }
 
 
 

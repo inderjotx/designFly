@@ -33,7 +33,10 @@ export async function POST(req: Request) {
 
         const responseFromPrism = await prisma.design.create({
             data: {
-                ...design
+                imageKey: design.imageKey,
+                title: design.title,
+                description: design.description,
+                userId: design.userId,
             }
         })
 

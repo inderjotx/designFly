@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import * as z from "zod"
-import { toast } from '../ui/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
@@ -20,6 +19,7 @@ import { Design } from '@prisma/client';
 import { Tag, X } from 'lucide-react';
 import { Tags } from '../ui/Tags';
 import { Badge } from '../ui/badge';
+import { toast } from 'react-hot-toast'
 
 
 
@@ -45,6 +45,7 @@ interface CreateDesignProps {
 
 export function CreateDesign({ initialData }: CreateDesignProps) {
 
+
     const title = initialData?.title || ""
     const description = initialData?.description || ""
     const imageUrl = initialData?.imageKey || null
@@ -57,12 +58,18 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
     console.log(isNew)
 
 
+    const router = useRouter()
     const session = useSession()
+
+    if (!session.data?.user) {
+        router.push('/signIn')
+    }
+
+
     const imageRef = useRef<HTMLInputElement | null>(null)
     const [hasImage, setHasImage] = useState<boolean>(false)
     const [selectedTags, setSelectedTags] = useState<string[]>([])
     const [image, setImage] = useState<string | null>(imageUrl)
-    const router = useRouter()
 
 
 
@@ -111,33 +118,37 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
             const headers = { 'Content-Type': selectedImage?.type }
 
 
-            const response = await axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
+            const uplaodingImagePromise = axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
 
 
-            console.log("response after sending the image to s3")
-            console.log(response)
 
-            if (response.status == 200) {
 
-                const response = await axios.post('/api/add-design', {
-                    title: values.title,
-                    description: values.description,
-                    imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
-                    userId: session.data?.user.id,
-                    tags: selectedTags
+            const addingDesignPromise = axios.post('/api/add-design', {
+                title: values.title,
+                description: values.description,
+                imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
+                userId: session.data?.user.id,
+                tags: selectedTags
 
+            })
+
+            const promises = Promise.all([uplaodingImagePromise, addingDesignPromise])
+
+            toast.promise(promises, {
+                loading: "adding design ...",
+                success: "Successfully added design.",
+                error: "Failed to added design"
+            })
+                .then(() => {
+
+                    router.push('/dashboard')
+                })
+                .catch(() => {
+                    console.log("Error creating Design")
                 })
 
-                console.log("response from user creation ")
-                console.log(response)
 
-                // give a toast and then move 
-                router.push('/dashboard')
-            }
 
-            else {
-                console.log("error occured ")
-            }
 
         }
 
@@ -179,32 +190,30 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                 const headers = { 'Content-Type': selectedImage?.type }
 
 
-                const response = await axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
+                const uploadingImagePromise = axios.put(presignedUrl, imageRef.current?.files?.[0], { headers })
 
 
-                console.log("response after sending the image to s3")
-                console.log(response)
 
-                if (response.status == 200) {
 
-                    const response = await axios.patch('/api/add-design', {
-                        title: values.title,
-                        description: values.description,
-                        imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
-                        userId: session.data?.user.id,
-                        id: initialData?.id
-                    })
+                const updaignDesignPromise = axios.patch('/api/add-design', {
+                    title: values.title,
+                    description: values.description,
+                    imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
+                    userId: session.data?.user.id,
+                    id: initialData?.id
+                })
 
-                    console.log("response from user creation ")
-                    console.log(response)
 
-                    // give a toast and then move 
-                    router.push('/dashboard')
-                }
+                const promises = Promise.all([updaignDesignPromise, uploadingImagePromise])
 
-                else {
-                    console.log("error occured ")
-                }
+                toast.promise(promises, {
+                    error: "Error updating Design",
+                    success: "Successfully updated design",
+                    loading: "Updating design",
+                })
+
+                // give a toast and then move 
+                router.push('/dashboard')
             }
 
             // normal patch 
@@ -212,12 +221,18 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
 
                 console.log("Image has not been updated")
 
-                const response = await axios.patch('/api/add-design', {
+                const response = axios.patch('/api/add-design', {
                     title: values.title,
                     description: values.description,
                     imageKey: initialData?.imageKey,
                     userId: session.data?.user.id,
                     id: initialData?.id
+                })
+
+                toast.promise(response, {
+                    error: "Error updating Design",
+                    success: "Successfully updated design",
+                    loading: "Updating design",
                 })
 
                 console.log("response from user creation ")

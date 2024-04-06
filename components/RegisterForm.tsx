@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import axios from "axios"
 
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import {
     Form,
     FormControl,
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { toast } from 'react-hot-toast'
 
 const formSchema = z.object({
@@ -32,6 +32,22 @@ type formSchemaType = z.infer<typeof formSchema>
 export function RegisterForm() {
 
     const router = useRouter()
+    const { data } = useSession()
+
+    if (data) {
+        redirect('/')
+    }
+
+    async function handleGoogleLogin() {
+
+        signIn("google", {
+            redirect: true,
+            callbackUrl: "http://localhost:3000"
+        })
+
+
+    }
+
 
     const form = useForm<formSchemaType>({
         resolver: zodResolver(formSchema),
@@ -87,7 +103,7 @@ export function RegisterForm() {
         <div className="h-full w-full flex justify-center ">
 
             <Form {...form} >
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col mt-24  items-center space-y-10  lg:w-2/5 w-9/12">
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col mt-20  items-center space-y-10  lg:w-2/5 w-9/12">
                     <div className="mr-auto" >
                         <h1 className="text-4xl font-medium">Register</h1>
                     </div>
@@ -133,13 +149,16 @@ export function RegisterForm() {
                         />
                     </div>
 
-                    <div className=" space-x-2">
-                        <Button type="submit" className="">Submit</Button>
-                        <Button variant="outline" className="">
-                            <Link href={"/"}>
-                                Cancel
-                            </Link>
-                        </Button>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-2" >
+                            <Button type="submit" className="">Submit</Button>
+                            <Button variant="outline" type="button" className="">
+                                <Link href={"/"}>
+                                    Cancel
+                                </Link>
+                            </Button>
+                        </div>
+                        <Button type="button" onClick={handleGoogleLogin} >Google</Button>
                     </div>
                     <h3 className="text-sm text-muted-foreground">Already registered ?  <span onClick={() => signIn()} className="font-semibold cursor-pointer text-foreground">Login here </span> </h3>
                 </form>

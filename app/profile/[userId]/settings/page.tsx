@@ -12,6 +12,8 @@ import { redirect, useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from 'react-hot-toast'
 
+const S3_URL = process.env.NEXT_PUBLIC_S3_URL
+
 export default function Page() {
 
     const session = useSession()
@@ -60,7 +62,7 @@ export default function Page() {
                 const s3PutResponse = axios.put(url, file, { headers: { 'Content-Type': file?.type } })
 
 
-                const newImage = "https://designfly.s3.amazonaws.com/" + imageKey
+                const newImage = S3_URL + imageKey
 
 
                 const responsePromise = axios.post("/api/update-profile", {
@@ -75,7 +77,8 @@ export default function Page() {
                     loading: "Updating User Information .....",
                     success: "Successfully Updated Information",
                     error: "Error Updating Information"
-                })
+                }
+                )
                     .then(() => {
                         setUserData((prev) => ({ ...prev, image: newImage }))
                         setCanEdit(false)
@@ -106,7 +109,7 @@ export default function Page() {
 
                 console.log("response from update update data")
                 console.log(response)
-                router.push('/dashboard')
+                router.push('/dashboard/new')
             }
 
 

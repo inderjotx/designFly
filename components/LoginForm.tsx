@@ -15,10 +15,10 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { toast } from 'react-hot-toast'
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 
 const formSchema = z.object({
     email: z.string().min(1).email("This is not a valid email "),
@@ -36,7 +36,11 @@ type formSchemaType = z.infer<typeof formSchema>
 export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: string }) {
 
 
-    // const [providers, setProviders] = useState([])
+    const { data } = useSession()
+
+    if (data) {
+        redirect('/')
+    }
 
     const router = useRouter()
 
@@ -56,7 +60,7 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
             password: values.password,
             email: values.email,
             redirect: true,
-            callbackUrl: callbackUrl ?? "http://localhost:3000/dashboard"
+            callbackUrl: "http://localhost:3000/dashboard/new"
         })
 
 
@@ -74,26 +78,11 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
 
     async function handleGoogleLogin() {
 
-        const response = await signIn("google", {
+        signIn("google", {
             redirect: true,
             callbackUrl: "http://localhost:3000"
         })
 
-
-        // toast.promise(response, {
-        //     loading: "Logging ....",
-        //     "success": "Successfully Logged In",
-        //     "error": "Error Logging In"
-        // })
-
-        toast.success("Successfully Logged In")
-
-        // redirect("/dashboard")
-
-        // if (providers && providers.google) {
-        //     await signIn(providers?.google?.id)
-
-        // }
 
     }
 
@@ -101,10 +90,10 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
 
     return (
 
-        <div className="w-full h-full flex justify-center ">
+        <div className="w-full h-full  flex justify-center ">
 
             <Form {...form} >
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex  flex-col mt-24 items-center   space-y-10 lg:w-2/5 w-9/12">
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" flex  flex-col mt-20 items-center   space-y-10 lg:w-2/5 w-9/12">
                     <div className="mr-auto" >
                         <h1 className="text-4xl font-medium">Login</h1>
                     </div>
@@ -137,20 +126,20 @@ export function LoginForm({ callbackUrl, error }: { callbackUrl: string, error: 
                         />
                     </div>
 
-                    <div className="space-x-2 ">
-                        <Button type="submit" className="">Submit</Button>
-                        <Button variant="outline" type="button" className="">
-                            <Link href={"/"}>
-                                Cancel
-                            </Link>
-                        </Button>
-                        {/* <Button type="button" variant="secondary" onClick={() => handleGoogleLogin()}>Login By Google</Button> */}
-                        {/* <Button type="button" onCli >Google</Button> */}
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-2" >
+                            <Button type="submit" className="">Submit</Button>
+                            <Button variant="outline" type="button" className="">
+                                <Link href={"/"}>
+                                    Cancel
+                                </Link>
+                            </Button>
+                        </div>
+                        <Button type="button" onClick={handleGoogleLogin} >Google</Button>
                     </div>
                     <h3 className="text-sm text-muted-foreground ">New on this application <Link href={"/register"} className="font-semibold text-foreground">Register here </Link> </h3>
 
                 </form>
-
             </Form>
 
 

@@ -1,15 +1,14 @@
 "use client"
 
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import Link from 'next/link';
 import React, { useState } from 'react'
 
 import { ThemeToggle } from './ThemeToggle';
-import { Profile } from './Profile';
 
 
-function Navbar() {
+function Navbar({ children }: { children: React.ReactNode }) {
 
     const { scrollY } = useScroll()
     const [hidden, setHidden] = useState<boolean>(false)
@@ -42,11 +41,11 @@ function Navbar() {
             <div className='ml-auto flex space-x-4' >
                 {session && session.data && session.data.user ?
                     <div className='flex items-center space-x-4'>
-                        <Profile />
+                        {children}
                     </div>
                     :
                     <div className='flex items-center space-x-4'>
-                        <Link className='cursor-pointer' href={"/signIn"}>Login</Link>
+                        <Link className='cursor-pointer' href={"/login"}>Login</Link>
                         <Link className='bg-secondary-foreground text-primary-foreground p-2 rounded-full px-4' href={"/register"}> Register</Link>
                     </div>
 

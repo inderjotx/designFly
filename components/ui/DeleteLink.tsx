@@ -27,7 +27,7 @@ export function DeleteIcon({ designId, color }: { designId: string, color: strin
         })
             .then(
                 () => {
-                    router.push('/dashboard')
+                    router.push('/dashboard/new')
                     router.refresh()
                 }
             )

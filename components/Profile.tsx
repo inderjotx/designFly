@@ -9,39 +9,55 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import Userimage from "./ui/Userimage"
-import { signOut, useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import Link from 'next/link'
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { Button } from "./ui/button"
+import { SignOutButton } from "./SignOutButton"
 
-export function Profile() {
+export async function Profile() {
 
-    const session = useSession()
 
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <button>
-                    <Userimage name={session.data?.user.name ?? "U"} url={session.data?.user.image ?? ""} />
-                </button>
+    const session = await getServerSession(authOptions)
 
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-36">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <Link href={"/profile/" + session.data?.user.id}  >Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Link href={"/profile/" + session.data?.user.id + "/loved"}  >Liked</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Link href={"/profile/" + session.data?.user.id + "/bookmark"}   >Bookmarks</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <div onClick={() => signOut()}>Log out</div>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
+    if (!session) {
+
+        <div>No data</div>
+
+    }
+
+    else {
+
+
+        return (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button>
+                        <Userimage name={session.user.name ?? "U"} url={session.user.image ?? ""} />
+                    </button>
+
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-36">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                            <Link href={"/profile/" + session.user.id}  >Profile</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href={"/profile/" + session.user.id + "/loved"}  >Liked</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href={"/profile/" + session.user.id + "/bookmark"}   >Bookmarks</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="mx-0" >
+                            <SignOutButton />
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        )
+    }
+
 }

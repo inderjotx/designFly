@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 
 import './globals.css'
+import { Profile } from '@/components/Profile'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -39,7 +40,9 @@ export default async function RootLayout({
             reverseOrder={true}
           />
           <Provider session={session}>
-            <Navbar />
+            <Navbar  >
+              <Profile />
+            </Navbar>
             {children}
           </Provider>
           <Toaster />

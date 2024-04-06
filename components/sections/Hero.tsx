@@ -20,7 +20,7 @@ async function Hero() {
 
         <div className='w-full min-h-full flex items-center mt-8  flex-col space-y-12'>
 
-            <span className='text-muted-foreground bg-foreground/10 p-2 rounded-full px-10' >{message}</span>
+            <span className='text-muted-foreground text-xs md:text-base bg-foreground/10 p-2 rounded-full px-10' >{message}</span>
 
             <div className='w-full flex items-center justify-center'>
                 <h1 className='text-4xl font-bold lg:text-5xl text-center leading-normal lg:leading-relaxed  '>
@@ -28,7 +28,7 @@ async function Hero() {
                 </h1>
             </div>
 
-            <div className='text-muted-foreground'>
+            <div className='text-muted-foreground text-center'>
                 {message2}
             </div>
 

@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils';
 
 
 
+const S3_URL = process.env.NEXT_PUBLIC_S3_URL
 
 
 const FormSchema = z.object({
@@ -127,7 +128,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
             const addingDesignPromise = axios.post('/api/add-design', {
                 title: values.title,
                 description: values.description,
-                imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
+                imageKey: S3_URL + imageKey,
                 userId: session.data?.user.id,
                 tags: selectedTags
 
@@ -142,7 +143,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
             })
                 .then(() => {
 
-                    router.push('/dashboard')
+                    router.push('/dashboard/new')
                 })
                 .catch(() => {
                     console.log("Error creating Design")
@@ -199,7 +200,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                 const updaignDesignPromise = axios.patch('/api/add-design', {
                     title: values.title,
                     description: values.description,
-                    imageKey: "https://designfly.s3.amazonaws.com/" + imageKey,
+                    imageKey: S3_URL + imageKey,
                     userId: session.data?.user.id,
                     id: initialData?.id
                 })
@@ -213,7 +214,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                 })
 
                 // give a toast and then move 
-                router.push('/dashboard')
+                router.push('/dashboard/new')
             }
 
             // normal patch 
@@ -239,7 +240,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                 console.log(response)
 
                 // give a toast and then move 
-                router.push('/dashboard')
+                router.push('/dashboard/new')
 
             }
 
@@ -309,7 +310,7 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                             }
                         </div>
                     </div>
-                    <div className='relative h-80 border-2 bg-background flex justify-center items-center border-black/60 dark:border-white/60  border-dashed rounded-md'>
+                    <div className='relative h-80 border-2 overflow-hidden bg-background flex justify-center items-center border-black/60 dark:border-white/60  border-dashed rounded-md'>
                         <Input
                             type='file'
                             accept=".jpg, .jpeg, .webp, .png"

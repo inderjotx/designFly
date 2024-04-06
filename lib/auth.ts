@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import { prisma } from './prismadb'
 import { hash, compare } from 'bcrypt'
 

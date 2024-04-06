@@ -1,15 +1,9 @@
 import { Button } from '@/components/ui/button'
 import Link from "next/link"
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
 
 import React from 'react'
 import { Separator } from '@/components/ui/separator'
-import { DesignGrid } from '@/components/DesignGrid'
-import { Tags } from '@/components/ui/Tags'
 import { prisma } from '@/lib/prismadb'
-import { Badge } from '@/components/ui/badge'
-import { Compass } from 'lucide-react'
 import { MyBadge } from '@/components/ui/MyBadge'
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

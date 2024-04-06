@@ -64,6 +64,7 @@ export const authOptions: AuthOptions = {
                 if (account?.provider == "google") {
                     // @ts-ignore
                     const newUser = await createUser(user.name, user.password, account?.provider, user.image, user.email)
+                    user.id = newUser.id
                 }
 
 
@@ -86,9 +87,20 @@ export const authOptions: AuthOptions = {
 
             account && (token.accessToken = account.access_token)
 
+            console.log("token")
+            console.log(token)
+
+            console.log("account")
+            console.log(account)
+
+            console.log("profile")
+            console.log(profile)
+
+            console.log("user")
             console.log(user)
 
             user && (token.user = user)
+
 
             return token
         }

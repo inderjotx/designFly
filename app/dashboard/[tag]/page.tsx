@@ -1,8 +1,10 @@
 
-import { Button } from '@/components/ui/button'
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import React from 'react'
 import { DesignGrid } from '@/components/DesignGrid'
 import { prisma } from '@/lib/prismadb'
+import { redirect } from "next/navigation"
 
 export async function generateStaticParams() {
     const tags = await prisma.tag.findMany()
@@ -10,6 +12,12 @@ export async function generateStaticParams() {
 }
 
 async function page({ params }: { params: { tag: string } }) {
+
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+        redirect('/login')
+    }
 
     return (
         <DesignGrid tag={params.tag} />

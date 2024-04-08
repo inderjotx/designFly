@@ -5,6 +5,6 @@ import React from 'react'
 
 export function SignOutButton() {
     return (
-        <div className='cursor-pointer  w-full h-full rounded-sm' onClick={() => signOut()}>Log Out</div>
+        <div className='cursor-pointer  w-full h-full rounded-sm' onClick={() => signOut({ redirect: true })}>Log Out</div>
     )
 }

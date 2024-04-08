@@ -5,7 +5,7 @@ import { X } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 export function DeleteIcon({ designId, color }: { designId: string, color: string }) {
 
@@ -25,12 +25,13 @@ export function DeleteIcon({ designId, color }: { designId: string, color: strin
             success: `Successfully deleted Design`,
             error: `Error Deleting Design`
         })
-            .then(
-                () => {
-                    router.push('/dashboard/new')
-                    router.refresh()
-                }
-            )
+
+        response.then(
+            () => {
+                router.push('/dashboard/new')
+                router.refresh()
+            }
+        )
 
             .catch((error) => {
 

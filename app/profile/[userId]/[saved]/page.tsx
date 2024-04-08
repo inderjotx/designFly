@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prismadb"
 
 export default async function Page({ params }: { params: { saved: string, userId: string } }) {
 
-    console.log(params)
+
 
 
     if (!params.userId) {

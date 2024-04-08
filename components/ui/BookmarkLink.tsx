@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
 
 import React from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 export function BookmarkIcon({ designId, color, hasBookmarked }: { designId: string, color: string, hasBookmarked: boolean }) {
 

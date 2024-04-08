@@ -23,7 +23,7 @@ import { Badge } from '@/components/ui/badge'
 
 export async function generateStaticParams() {
     const design = await prisma.design.findMany()
-    return design.map((design) => { designId: design.id })
+    return design.map((design) => ({ designId: design.id }))
 }
 
 

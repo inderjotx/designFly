@@ -5,7 +5,7 @@ import { HeartIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
 import React from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 export function HeartIconLink({ designId, color, hasLiked }: { designId: string, color: string, hasLiked: boolean }) {
 

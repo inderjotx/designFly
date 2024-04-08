@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next"
 
 import Provider from "@/components/providers/NextAuthProvider"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from '@/components/ui/sonner'
 import Navbar from '@/components/Navbar'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 
@@ -35,17 +35,16 @@ export default async function RootLayout({
       <head />
       <body className={`${inter.className}`}  >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-          <Toaster
-            position="top-center"
-            reverseOrder={true}
-          />
           <Provider session={session}>
             <Navbar  >
               <Profile />
             </Navbar>
+            <Toaster
+              richColors
+              position='top-center'
+            />
             {children}
           </Provider>
-          <Toaster />
         </ThemeProvider>
       </body>
     </html >

@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 import { redirect, useRouter } from "next/navigation"
 
 const formSchema = z.object({

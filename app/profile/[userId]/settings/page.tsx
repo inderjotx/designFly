@@ -10,7 +10,7 @@ import axios from "axios"
 import { signOut, useSession } from "next-auth/react"
 import { redirect, useRouter } from "next/navigation"
 import { useRef, useState } from "react"
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 const S3_URL = process.env.NEXT_PUBLIC_S3_URL
 
@@ -79,12 +79,13 @@ export default function Page() {
                     error: "Error Updating Information"
                 }
                 )
-                    .then(() => {
-                        setUserData((prev) => ({ ...prev, image: newImage }))
-                        setCanEdit(false)
-                        signOut()
-                        router.push('/signIn')
-                    })
+
+                promises.then(() => {
+                    setUserData((prev) => ({ ...prev, image: newImage }))
+                    setCanEdit(false)
+                    signOut()
+                    router.push('/signIn')
+                })
                 console.log("response from update update data")
 
 
@@ -137,7 +138,7 @@ export default function Page() {
     return (
         <div className="flex justify-center items-center flex-col">
             <div className="p-8">
-                <Userimage className="h-28 w-28 text-2xl" name={session.data?.user.name || ""} url={!canEdit ? session.data?.user.image || "" : (imageRef.current?.files?.[0]) ? URL.createObjectURL(imageRef.current?.files[0]) : session.data?.user.image} />
+                <Userimage className="h-28 w-28 text-2xl" name={session.data?.user.name || ""} url={!canEdit ? session.data?.user.image || "" : (imageRef.current?.files?.[0]) ? URL.createObjectURL(imageRef.current?.files[0]) : session.data?.user.image || ""} />
             </div>
             <div>
                 <h2 onClick={() => setCanEdit(true)} className={cn("text-muted-foreground transition-colors hover:text-foreground cursor-pointer", canEdit && "hidden")}>Update Profile</h2>
@@ -149,12 +150,12 @@ export default function Page() {
             <div className="w-3/5 mt-20 space-y-10">
                 <div>
                     <Label className="ml-1">Name</Label>
-                    <Input disabled={!canEdit} value={!canEdit ? session.data?.user.name : userData.name} onChange={(e) => setUserData((prev) => ({ ...prev, name: e.target.value }))} className="" type="text" />
+                    <Input disabled={!canEdit} value={!canEdit ? session.data?.user.name || "" : userData.name || ""} onChange={(e) => setUserData((prev) => ({ ...prev, name: e.target.value }))} className="" type="text" />
                 </div>
 
                 <div>
                     <Label className="ml-1">Email</Label>
-                    <Input disabled={!canEdit} value={!canEdit ? session.data?.user.email : userData.email} onChange={(e) => setUserData((prev) => ({ ...prev, email: e.target.value }))} className="" type="text" />
+                    <Input disabled={!canEdit} value={!canEdit ? session.data?.user.email || "" : userData.email || ""} onChange={(e) => setUserData((prev) => ({ ...prev, email: e.target.value }))} className="" type="text" />
                 </div>
 
 

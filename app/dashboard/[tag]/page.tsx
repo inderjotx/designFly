@@ -8,16 +8,15 @@ import { redirect } from "next/navigation"
 
 export async function generateStaticParams() {
     const tags = await prisma.tag.findMany()
-    return tags.map((tag) => { tag: tag.name })
+    const data = tags.map((tag) => ({ tag: tag.name }))
+    data.push({ tag: 'new' })
+    return data
 }
 
 async function page({ params }: { params: { tag: string } }) {
 
     const session = await getServerSession(authOptions)
 
-    if (!session) {
-        redirect('/login')
-    }
 
     return (
         <DesignGrid tag={params.tag} />

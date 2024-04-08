@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { redirect, useRouter } from "next/navigation"
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
     username: z.string().min(2, "Name Should atleast have 5 characters").max(50),

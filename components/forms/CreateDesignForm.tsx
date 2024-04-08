@@ -19,7 +19,7 @@ import { Design } from '@prisma/client';
 import { Tag, X } from 'lucide-react';
 import { Tags } from '../ui/Tags';
 import { Badge } from '../ui/badge';
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 import { cn } from '@/lib/utils';
 
 
@@ -141,10 +141,10 @@ export function CreateDesign({ initialData }: CreateDesignProps) {
                 success: "Successfully added design.",
                 error: "Failed to added design"
             })
-                .then(() => {
+            promises.then(() => {
 
-                    router.push('/dashboard/new')
-                })
+                router.push('/dashboard/new')
+            })
                 .catch(() => {
                     console.log("Error creating Design")
                 })

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 export default function FollowButton({ followerId, followingId, intension }:
     { followerId: string, followingId: string, intension: string }) {

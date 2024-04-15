@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { prisma } from '@/lib/prismadb'
 import { MyBadge } from '@/components/ui/MyBadge'
 
+// <div className='w-11/12 :w-10/12 mt-10 h-10 flex justify-between items-center  '></div>
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
 
@@ -14,12 +15,13 @@ export default async function Layout({ children }: { children: React.ReactNode }
     return (
         <div className='flex mx-3 flex-col items-center gap-4'>
 
-            <div className='w-11/12 lg:w-10/12 mt-10 h-10 flex justify-between items-center  '>
+            <div className=' flex w-11/12 justify-between items-center gap-4 '>
                 {/* { two new / our designs } */}
-                <div className='space-x-3 flex items-center'>
+                <div className='space-x-3 relative  flex overflow-x-scroll hidescrollBar   items-center'>
                     <Link href={'/dashboard/new'}>
                         <MyBadge name={'new'} />
                     </Link>
+
                     {
                         tags.map((tag) => (
                             <Link key={tag.name} href={`/dashboard/${tag.name}`} >
@@ -30,8 +32,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
                 </div>
 
+
+
                 {/* { Add Design } */}
-                <div className=''>
+                <div className='mb-1'>
                     <Button variant="default" className='rounded-full px-8' asChild >
                         <Link href={"/designs/create"}>
                             Add Design</Link>

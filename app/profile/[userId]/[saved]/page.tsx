@@ -6,8 +6,6 @@ import { prisma } from "@/lib/prismadb"
 export default async function Page({ params }: { params: { saved: string, userId: string } }) {
 
 
-
-
     if (!params.userId) {
         return <div>This user does not  exist </div>
     }
@@ -33,19 +31,26 @@ export default async function Page({ params }: { params: { saved: string, userId
 
         return (
 
-            <div className="flex justify-center mt-14">
+            <div className="flex flex-col" >
 
-
-                <div className='grid  grid-cols-2 lg:grid-cols-4 gap-12 center'>
-                    {
-
-                        hearts.map(({ design, user }, index) => (
-                            <div className='' key={index}>
-                                <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
-                            </div>
-                        ))
-                    }
+                <div className=" mx-auto text-3xl mt-10" >
+                    Liked
                 </div>
+
+                <div className="flex justify-center mt-14">
+
+                    <div className='grid  grid-cols-1 md:grid-cols-3 px-10 lg:grid-cols-4 gap-12 center'>
+                        {
+
+                            hearts.map(({ design, user }, index) => (
+                                <div className='' key={index}>
+                                    <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
             </div>
 
         )
@@ -71,20 +76,27 @@ export default async function Page({ params }: { params: { saved: string, userId
 
         return (
 
-            <div className="flex justify-center mt-14">
+            <div className="flex flex-col" >
 
-
-                <div className='grid  grid-cols-2 lg:grid-cols-4 gap-12 center'>
-                    {
-
-                        bookmarks.map(({ design, user }, index) => (
-                            <div className='' key={index}>
-                                <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
-                            </div>
-                        ))
-                    }
+                <div className=" mx-auto text-3xl mt-10" >
+                    Bookmarks
                 </div>
+
+
+                <div className="flex justify-center mt-14">
+                    <div className='grid  grid-cols-1 md:grid-cols-3 px-10   lg:grid-cols-4 gap-12 center'>
+                        {
+                            bookmarks.map(({ design, user }, index) => (
+                                <div className='' key={index}>
+                                    <DesignCard bookmarks={design.BookMark} design={design} creator={user} hearts={design.Heart} />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
             </div>
+
 
         )
     }

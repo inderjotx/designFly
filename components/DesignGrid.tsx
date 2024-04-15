@@ -27,7 +27,7 @@ export async function DesignGrid({ tag }: { tag?: string }) {
             }
         })
         return (
-            <div className='mt-8  grid grid-cols-1   md:grid-cols-2 lg:grid-cols-4 gap-12 center'>
+            <div className='mt-8 mb-20 grid grid-cols-1   md:grid-cols-2 lg:grid-cols-4 gap-12 center'>
 
                 {
                     designs.map((design, index) => (
@@ -57,7 +57,7 @@ export async function DesignGrid({ tag }: { tag?: string }) {
         })
 
         return (
-            <div className='mt-8  grid grid-cols-1   md:grid-cols-2 lg:grid-cols-4 gap-12 center'>
+            <div className='mt-8  mb-20  grid grid-cols-1   md:grid-cols-2 lg:grid-cols-4 gap-12 center'>
 
                 {
                     data.map(({ Post }, index) => (

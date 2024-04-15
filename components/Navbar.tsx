@@ -35,7 +35,7 @@ function Navbar({ children }: { children: React.ReactNode }) {
                     y: 0
                 }
             }}
-            className='z-10 w-full flex items-center p-4  backdrop-blur-md h-20 sticky top-0'>
+            className='z-10 w-full flex items-center px-10 lg:px-20 p-4  backdrop-blur-md h-20 sticky top-0'>
             <div><Link href={"/"} className='text-xl font-medium' >DesignFly</Link></div>
 
             <div className='ml-auto flex space-x-4' >
